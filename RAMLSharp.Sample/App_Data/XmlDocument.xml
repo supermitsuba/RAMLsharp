@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RamlSharp.Sample</name>
+    </assembly>
+    <members>
+        <member name="T:RAMLSharp.Sample.Controllers.DerpController">
+            <summary>
+            my derp
+            </summary>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.DerpController.Get">
+            <summary>
+            deeee
+            </summary>
+            <returns>rrrp</returns>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Get">
+            <summary>
+            This gets the values, da!
+            </summary>
+            <example>Example of get</example>
+            <returns>Returns a list of values!</returns>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Raml">
+            <summary>
+            Gets Raml
+            </summary>
+            <returns>Returns a string of RAML</returns>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Post(System.String)">
+            <summary>
+            This inserts a value
+            </summary>
+            <param name="value">The value</param>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Put(System.Int32,System.String)">
+            <summary>
+            updates the values
+            </summary>
+            <param name="id">id</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Delete(System.Int32)">
+            <summary>
+            DELETE ALL THINGS
+            </summary>
+            <param name="id">With this id</param>
+        </member>
+    </members>
+</doc>
