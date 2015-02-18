@@ -17,7 +17,7 @@
         </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Get">
             <summary>
-            This gets the values, da!
+            This gets the tests
             </summary>
             <example>Example of get</example>
             <returns>Returns a list of values!</returns>
@@ -30,20 +30,20 @@
         </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Post(System.String)">
             <summary>
-            This inserts a value
+            This inserts a test
             </summary>
-            <param name="value">The value</param>
+            <param name="testCase">The test</param>
         </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Put(System.Int32,System.String)">
             <summary>
-            updates the values
+            updates the test
             </summary>
-            <param name="id">id</param>
-            <param name="value">value</param>
+            <param name="id">id of the test</param>
+            <param name="testCase">The test</param>
         </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Delete(System.Int32)">
             <summary>
-            DELETE ALL THINGS
+            Delete a test
             </summary>
             <param name="id">With this id</param>
         </member>
