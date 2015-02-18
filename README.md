@@ -24,7 +24,13 @@ If there is a feature that is missing, check out the How to Contribute section.
 
 ##Setup
 
-First, serve up a route for your RAML File:
+First, add the nuget package from https://www.nuget.org/packages/RamlSharp/:
+
+```
+PM> Install-Package RamlSharp
+```
+
+Here is how you can serve up a route for your RAML File:
 ```
 [ApiExplorerSettings(IgnoreApi=true)]
 [Route("api/raml"), HttpGet]
@@ -58,11 +64,11 @@ This line will read in the xml documentation to describe your API.  You can enab
 
 Lastly, add some XML documentation to your API calls:
 
-![](https://raw.githubusercontent.com/supermitsuba/RAMLsharp/master/images/sampleController.png)
+![](https://raw.githubusercontent.com/QuickenLoans/RAMLsharp/master/images/sampleController.png)
 
 This will allow you to take the RAML generated and view your API in something like API Designer (https://github.com/mulesoft/api-designer):
 
-![](https://raw.githubusercontent.com/supermitsuba/RAMLsharp/master/images/sampleRAML.png)
+![](https://raw.githubusercontent.com/QuickenLoans/RAMLsharp/master/images/sampleRAML.png)
 
 
 ##How to Contribute
