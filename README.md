@@ -31,7 +31,7 @@ PM> Install-Package RamlSharp
 ```
 
 Here is how you can serve up a route for your RAML File:
-```
+```csharp
 [ApiExplorerSettings(IgnoreApi=true)]
 [Route("api/raml"), HttpGet]
 public HttpResponseMessage RAML()
@@ -51,7 +51,7 @@ public HttpResponseMessage RAML()
 
 Next, you need to add this line to your WebApiConfig.cs:
 
-```
+```csharp
 public static void Register(HttpConfiguration config)
 {
     // Web API configuration and services
@@ -64,7 +64,29 @@ This line will read in the xml documentation to describe your API.  You can enab
 
 Lastly, add some XML documentation to your API calls:
 
-![](https://raw.githubusercontent.com/QuickenLoans/RAMLsharp/master/images/sampleController.png)
+```csharp
+/// <summary>
+/// This inserts a test
+/// </summary>
+/// <param name="testCase">The test</param>
+[RequestHeaders(Name = "Accept", 
+    Example = "application/json", 
+    IsRequired = true,
+    Minimum = -1,
+    Maximum = -2,
+    Type = typeof(int), 
+    Description = "This is the content type we want from the server"
+)]
+[ResponseBody(StatusCode = HttpStatusCode.OK, ContentType = "application/json", Example = "[should be the location of this test]", Description="This is the standard request back.")]
+[ResponseBody(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
+[ResponseBody(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
+[Route("api/tests"), HttpPost]
+public void Post([FromBody]string testCase)
+{
+    //Inserts a test file
+}
+```
+(You can check out more examples from the RAMLSharp.Sample project in the solution.)
 
 This will allow you to take the RAML generated and view your API in something like API Designer (https://github.com/mulesoft/api-designer):
 
