@@ -70,5 +70,7 @@ This will allow you to take the RAML generated and view your API in something li
 If you would like to contribute, please feel free to do a pull request.
 
 Special thanks for contributing:
+
 Jorden Lowe
+
 Dominick Aleardi
