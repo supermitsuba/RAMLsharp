@@ -72,9 +72,7 @@ Lastly, add some XML documentation to your API calls:
 [RequestHeaders(Name = "Accept", 
     Example = "application/json", 
     IsRequired = true,
-    Minimum = -1,
-    Maximum = -2,
-    Type = typeof(int), 
+    Type = typeof(string), 
     Description = "This is the content type we want from the server"
 )]
 [ResponseBody(StatusCode = HttpStatusCode.OK, ContentType = "application/json", Example = "[should be the location of this test]", Description="This is the standard request back.")]
