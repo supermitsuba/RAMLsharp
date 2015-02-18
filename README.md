@@ -24,7 +24,7 @@ If there is a feature that is missing, check out the How to Contribute section.
 
 ##Setup
 
-First, serve up all the documentation in a RAML File:
+First, serve up a route for your RAML File:
 ```
 [ApiExplorerSettings(IgnoreApi=true)]
 [Route("api/raml"), HttpGet]
@@ -44,6 +44,7 @@ public HttpResponseMessage RAML()
 ```
 
 Next, you need to add this line to your WebApiConfig.cs:
+
 ```
 public static void Register(HttpConfiguration config)
 {
@@ -54,6 +55,15 @@ public static void Register(HttpConfiguration config)
 ```
 
 This line will read in the xml documentation to describe your API.  You can enable that in your project properties.  Make sure you note where you will save that xml file so you can put that into your xml documentation path.
+
+Lastly, add some XML documentation to your API calls:
+
+![](https://raw.github.com/QuickenLoans/RAMLsharp/tree/master/images/sampleController.png)
+
+This will allow you to take the RAML generated and view your API in something like API Designer (https://github.com/mulesoft/api-designer):
+
+![](https://raw.github.com/QuickenLoans/RAMLsharp/tree/master/images/sampleRAML.png)
+
 
 ##How to Contribute
 
