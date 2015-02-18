@@ -1,7 +1,7 @@
 RAMLSharp
 =========
 
-This is a tool for Web API, in .net, to allow you to build documentation, using RAML.
+This is a tool for ASP.net Web API that will allow you to build RAML documentation.
 
 ##Purpose
 The purpose of the tool is to allow a developer to code RAML documentation, using Attributes and Asp.net Web API Help Pages.  This allows you to create RAML documentation using help pages behind the scenes.  The workflow would be:
@@ -39,7 +39,7 @@ public HttpResponseMessage RAML()
     var result = new HttpResponseMessage(HttpStatusCode.OK);
             
     var r = new RAMLMapper(this);
-    var data = r.WebApiToRAMLModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
+    var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
                 .ToString();
 
     result.Content = new StringContent(data);
