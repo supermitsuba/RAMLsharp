@@ -127,7 +127,9 @@ namespace RAMLSharp.Models
 
         private StringBuilder SetHeaders(StringBuilder RAML, RouteModel route)
         {
-            if (route.Headers == null || route.Headers.Count <= 0) return RAML;
+            if (route.Headers == null || 
+                route.Headers.Count <= 0 ||
+                route.Headers.All(p => String.IsNullOrEmpty(p.Name))) return RAML;
             
             RAML.AppendFormat("    headers:{0}", _newLine);
             return route.Headers.Aggregate(RAML, SetHeaderDetails);
@@ -137,10 +139,23 @@ namespace RAMLSharp.Models
         {
             RAML.AppendFormat("      {0}: {1}", header.Name, _newLine);
             RAML.AppendFormat("        displayName: {0}{1}", header.Name, _newLine);
-            RAML.AppendFormat("        example: {0}{1}", header.Example, _newLine);
-            RAML.AppendFormat("        type: {0}{1}", header.Type.ToRamlType(), _newLine);
+
+            if (!String.IsNullOrEmpty(header.Example))
+            {
+                RAML.AppendFormat("        example: {0}{1}", header.Example, _newLine);
+            }
+
+            if (header.Type != null)
+            {
+                RAML.AppendFormat("        type: {0}{1}", header.Type.ToRamlType(), _newLine);
+            }
+
             RAML = SetHeaderMinMax(RAML, header);
-            RAML.AppendFormat("        description: {0}{1}", header.Description, _newLine);
+            if (!String.IsNullOrEmpty(header.Description))
+            {
+                RAML.AppendFormat("        description: {0}{1}", header.Description, _newLine);
+            }
+
             return RAML;
         }
 

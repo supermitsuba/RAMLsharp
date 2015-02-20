@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Http.Routing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Web.Http.Description;
-using Moq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RAMLSharp.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Web.Http.Description;
 
 namespace RAMLSharp.Test
 {
@@ -13,11 +11,12 @@ namespace RAMLSharp.Test
     [ExcludeFromCodeCoverage]
     public class RamlMapperTests
     {
-        #region null checks for base information
-        [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullAPIs()
+        RAMLModel expectedModel = null;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            var expected = new RAMLModel
+            expectedModel = new RAMLModel
             {
                 BaseUri = new Uri("http://www.test.com"),
                 DefaultMediaType = "application/json",
@@ -26,133 +25,93 @@ namespace RAMLSharp.Test
                 Version = "1",
                 Routes = new List<RouteModel>()
             };
-            IEnumerable<ApiDescription> model = null;
+        }
 
-            var subject = new RAMLMapper(model);
+        #region null checks for base information
+        [TestMethod]
+        public void RAMLSharp_CreateRamlDocumentWithNullAPIs_DisplayBasicRAMLDocument()
+        {
+            IEnumerable<ApiDescription> modelApiDescription = null;
+
+            var subject = new RAMLMapper(modelApiDescription);
             var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNoAPIs()
+        public void RAMLSharp_CreateRamlDocumentWithNoAPIs_DisplayBasicRAMLDocument()
         {
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1"
-            };
-            var model = new List<ApiDescription>();
+            expectedModel.Routes = null;
+            var modelApiDescription = new List<ApiDescription>();
 
-            var subject = new RAMLMapper(model);
+            var subject = new RAMLMapper(modelApiDescription);
             var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullUri()
+        public void RAMLSharp_CreateRamlDocumentWithNullUri_DisplayBasicRAMLDocumentWithoutURI()
         {
-            Uri expectedUri = null;
-            var expected = new RAMLModel
-            {
-                BaseUri = expectedUri,
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1"
-            };
+            expectedModel.BaseUri = null;
             var model = new List<ApiDescription>();
 
             var subject = new RAMLMapper(model);
-            var result = subject.WebApiToRamlModel(expectedUri, "test", "1", "application/json", "test");
+            var result = subject.WebApiToRamlModel(expectedModel.BaseUri, "test", "1", "application/json", "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullTitle()
+        public void RAMLSharp_CreateRamlDocumentWithNullTitle_DisplayBasicRAMLDocumentWithBlankTitle()
         {
-            string expectedTitle = null;
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = expectedTitle,
-                Version = "1"
-            };
+            expectedModel.Title = null;
             var model = new List<ApiDescription>();
 
             var subject = new RAMLMapper(model);
-            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), expectedTitle, "1", "application/json", "test");
-
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), expectedModel.Title, "1", "application/json", "test");
+            var r = result.ToString();
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.IsTrue(result.ToString().Contains("title:"));
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullDescription()
+        public void RAMLSharp_CreateRamlDocumentWithNullDescription_DisplayBasicRAMLDocumentWithoutDescription()
         {
-            string expectedDescription = null;
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = expectedDescription,
-                Title = "test",
-                Version = "1"
-            };
+            expectedModel.Description = null;
             var model = new List<ApiDescription>();
 
             var subject = new RAMLMapper(model);
-            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", expectedDescription);
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", expectedModel.Description);
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
             Assert.IsFalse(result.ToString().Contains("content:"));
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullVersion()
+        public void RAMLSharp_CreateRamlDocumentWithNullVersion_DisplayBasicRAMLDocumentWithoutVersion()
         {
-            string expectedVersion = null;
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = expectedVersion
-            };
+            expectedModel.Version = null;
             var model = new List<ApiDescription>();
 
             var subject = new RAMLMapper(model);
-            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", expectedVersion, "application/json", "test");
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", expectedModel.Version, "application/json", "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
             Assert.IsFalse(result.ToString().Contains("version:"));
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithNullBaseMediaType()
+        public void RAMLSharp_CreateRamlDocumentWithNullBaseMediaType_DisplayBasicRAMLDocumentWithoutMediaType()
         {
-            string expectedBaseMediaType = null;
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = expectedBaseMediaType,
-                Description = "test",
-                Title = "test",
-                Version = "1"
-            };
+            expectedModel.DefaultMediaType = null;
             var model = new List<ApiDescription>();
 
             var subject = new RAMLMapper(model);
-            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", expectedBaseMediaType, "test");
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", expectedModel.DefaultMediaType, "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
             Assert.IsFalse(result.ToString().Contains("mediaType:"));
         }
 
@@ -160,7 +119,7 @@ namespace RAMLSharp.Test
 
         #region check for fields in base information
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithVersion()
+        public void RAMLSharp_CreateRamlDocumentWithVersion_GenerateRAMLWithVersion()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -171,7 +130,7 @@ namespace RAMLSharp.Test
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithBaseMediaType()
+        public void RAMLSharp_CreateRamlDocumentWithBaseMediaType_GenerateRAMLWithMediaType()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -182,7 +141,7 @@ namespace RAMLSharp.Test
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithDescription()
+        public void RAMLSharp_CreateRamlDocumentWithDescription_GenerateRAMLWithDescription()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -193,7 +152,7 @@ namespace RAMLSharp.Test
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithTitle()
+        public void RAMLSharp_CreateRamlDocumentWithTitle_GenerateRAMLWithTitle()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -204,7 +163,7 @@ namespace RAMLSharp.Test
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithUri()
+        public void RAMLSharp_CreateRamlDocumentWithUri_GenerateRAMLWithBaseURI()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -215,7 +174,7 @@ namespace RAMLSharp.Test
         }
 
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithProtocol()
+        public void RAMLSharp_CreateRamlDocumentWithProtocol_GenerateRAMLWithProtocol()
         {
             IEnumerable<ApiDescription> model = null;
 
@@ -228,24 +187,17 @@ namespace RAMLSharp.Test
 
         #region ApiDescription Tests
         [TestMethod]
-        public void RAMLSharp_CreateRamlDocumentWithOneApi()
+        public void RAMLSharp_CreateRamlDocumentWithOneApi_GenerateRAMLWithOneAPI()
         {
-            var expected = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1",
-                Routes = new List<RouteModel>
+            expectedModel.Routes = new List<RouteModel>
+            { 
+                new RouteModel
                 { 
-                    new RouteModel
-                    { 
-                        UrlTemplate="api/test", 
-                        Verb="get" 
-                    } 
-                }
+                    UrlTemplate="api/test", 
+                    Verb="get" 
+                } 
             };
+            
             IEnumerable<ApiDescription> model = new List<ApiDescription>()
             {
                 new ApiDescription
@@ -258,7 +210,7 @@ namespace RAMLSharp.Test
             var subject = new RAMLMapper(model);
             var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
 
-            Assert.AreEqual(expected.ToString(), result.ToString(), "The RAML string must be the same.");
+            Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
         #endregion
     }
