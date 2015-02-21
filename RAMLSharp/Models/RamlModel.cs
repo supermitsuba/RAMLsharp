@@ -202,15 +202,24 @@ namespace RAMLSharp.Models
 
         private StringBuilder SetResponses(StringBuilder RAML, RouteModel route)
         {
-            if (route.Responses == null || route.Responses.Count <= 0) return RAML;
+            if (route.Responses == null || 
+                route.Responses.Count <= 0 ||
+                route.Responses.All(p => String.IsNullOrEmpty(p.ContentType))) return RAML;
            
             RAML.AppendFormat("    responses:{0}", _newLine);
             foreach (var response in route.Responses)
             {
                 RAML.AppendFormat("      {0}:{1}", (int)response.StatusCode, _newLine);
+                if (!String.IsNullOrEmpty(response.Description))
+                {
+                    RAML.AppendFormat("        description: |{1}          {0}{1}", response.Description, _newLine);
+                }
                 RAML.AppendFormat("        body:{0}", _newLine);
                 RAML.AppendFormat("          {0}: {1}", response.ContentType, _newLine);
-                RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);
+                if (!String.IsNullOrEmpty(response.Example))
+                {
+                    RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);
+                }
             }
             return RAML;
         }
