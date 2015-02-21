@@ -78,6 +78,7 @@
     <Compile Include="RamlMapperTests.cs" />
     <Compile Include="TypeExtensionsTest.cs" />
     <Compile Include="RamlMapperHeaderTests.cs" />
+    <Compile Include="RamlMapperResponseBodyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RamlSharp\RamlSharp.csproj">
