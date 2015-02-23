@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Xml.Serialization;
 using RAMLSharp.Attributes;
 
 namespace RAMLSharp.Sample.Controllers
@@ -18,7 +19,7 @@ namespace RAMLSharp.Sample.Controllers
         /// <example>Example of get</example>
         /// <returns>Returns a list of values!</returns>
         [RequestHeaders(Name = "Accept", Example = "application/json", IsRequired = true, Type = typeof(string), Description = "This is the content type we want from the server")]
-        [ResponseBody(StatusCode=HttpStatusCode.OK, ContentType = "application/json", Example = "['value1', 'value2']")]
+        [ResponseBody(StatusCode=HttpStatusCode.OK, ContentType = "application/json", Example = "['value1', 'value2']", Schema = "values")]
         [ResponseBody(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
         [ResponseBody(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
         [Route("api/tests"), HttpGet]

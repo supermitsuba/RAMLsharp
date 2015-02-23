@@ -195,6 +195,7 @@ namespace RAMLSharp.Models
                 RAML.AppendFormat("      {0}:{1}", (int)response.StatusCode, _newLine);
                 RAML.AppendFormat("        body:{0}", _newLine);
                 RAML.AppendFormat("          {0}: {1}", response.ContentType, _newLine);
+                RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
                 RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);
             }
             return RAML;
