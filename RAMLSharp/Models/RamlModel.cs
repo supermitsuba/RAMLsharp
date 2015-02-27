@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -220,6 +220,7 @@ namespace RAMLSharp.Models
                 {
                     RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);
                 }
+                RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
             }
             return RAML;
         }
