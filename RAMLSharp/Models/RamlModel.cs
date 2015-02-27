@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -216,6 +216,7 @@ namespace RAMLSharp.Models
                 }
                 RAML.AppendFormat("        body:{0}", _newLine);
                 RAML.AppendFormat("          {0}: {1}", response.ContentType, _newLine);
+                RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
                 if (!String.IsNullOrEmpty(response.Example))
                 {
                     RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);

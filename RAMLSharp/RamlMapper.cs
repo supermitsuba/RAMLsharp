@@ -82,7 +82,8 @@ namespace RAMLSharp
                     ContentType = a.ContentType,
                     Example = File.Exists(a.Example) ? File.ReadAllText(a.Example) : a.Example,
                     StatusCode = a.StatusCode,
-                    Description = a.Description
+                    Description = a.Description,
+                    Schema = a.Schema
                 }).ToList();
             }
 
