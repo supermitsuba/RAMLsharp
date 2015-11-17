@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Serialization;
 using RAMLSharp.Attributes;
+using RAMLSharp.Sample.Models;
 
 namespace RAMLSharp.Sample.Controllers
 {
@@ -89,6 +90,16 @@ namespace RAMLSharp.Sample.Controllers
         [Route("api/tests/{id}"), HttpDelete]
         public void Delete(int id)
         {
+        }
+
+        [Route("list")]
+        [HttpGet]
+        public HttpResponseMessage GetSomething([FromUri]BunchOfFields searchRequest)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                 Content=new StringContent("doing something")
+            };
         }
     }
 }

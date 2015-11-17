@@ -74,11 +74,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Fakes\FakeApiDescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RamlMapperTests.cs" />
+    <Compile Include="Fakes\FakeComplex.cs" />
+    <Compile Include="Fakes\FakeInheritedComplex.cs" />
+    <Compile Include="Fakes\FakeNestedComplex.cs" />
     <Compile Include="TypeExtensionsTest.cs" />
     <Compile Include="RamlMapperHeaderTests.cs" />
     <Compile Include="RamlMapperResponseBodyTests.cs" />
+    <Compile Include="UriParameterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RamlSharp\RamlSharp.csproj">
