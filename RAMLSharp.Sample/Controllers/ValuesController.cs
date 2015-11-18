@@ -38,7 +38,7 @@ namespace RAMLSharp.Sample.Controllers
         public HttpResponseMessage Raml()
         {
             var result = new HttpResponseMessage(HttpStatusCode.OK);
-
+            
             var r = new RAMLMapper(this);
             var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
                         .ToString();
