@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Web.Http;
 using System.Web.Http.Description;
 
 namespace RAMLSharp.Configuration
 {
+    [ExcludeFromCodeCoverage()] // This was auto generated code from Web API Help Pages
     public static class HelpPageConfigurationExtensions
     {
         private const string ApiModelPrefix = "MS_HelpPageApiModel_";

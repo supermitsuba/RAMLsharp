@@ -29,5 +29,29 @@ namespace RAMLSharp
                     return "string";
             }
         }
+
+        public static bool IsComplexModel(this Type typeValue)
+        {
+            switch (Type.GetTypeCode(typeValue))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                case TypeCode.Boolean:
+                case TypeCode.DateTime:
+                case TypeCode.String:
+                    return false;
+                default:
+                    return true;
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace RAMLSharp
                 IEnumerable<RequestHeadersAttribute> headers = null;
                 IEnumerable<ResponseBodyAttribute> responseBody = null;
 
-                if(api.ActionDescriptor != null)
+                if (api.ActionDescriptor != null)
                 {
                     headers = api.ActionDescriptor.GetCustomAttributes<RequestHeadersAttribute>();
                     responseBody = api.ActionDescriptor.GetCustomAttributes<ResponseBodyAttribute>();
@@ -58,7 +58,7 @@ namespace RAMLSharp
                     Description = api.Documentation
                 };
 
-                if (routeModel.Verb == "put" || routeModel.Verb == "post") 
+                if (routeModel.Verb == "put" || routeModel.Verb == "post")
                 {
                     routeModel.RequestContentType = "application/x-www-form-urlencoded:";
                 }
@@ -96,9 +96,9 @@ namespace RAMLSharp
                 .Where(r => r.Source == ApiParameterSource.FromBody)
                 .Select(q => new RequestBodyParameterModel
                 {
-                    Name = q.Name, 
-                    Description = q.Documentation, 
-                    IsRequired = q.ParameterDescriptor.IsOptional, 
+                    Name = q.Name,
+                    Description = q.Documentation,
+                    IsRequired = q.ParameterDescriptor.IsOptional,
                     Type = q.ParameterDescriptor.ParameterType,
                     Example = q.ParameterDescriptor.DefaultValue == null ? "" : q.ParameterDescriptor.DefaultValue.ToString()
                 })
@@ -107,8 +107,34 @@ namespace RAMLSharp
 
         private static IList<RequestUriParameterModel> GetUriParameters(ApiDescription description)
         {
-            return description.ParameterDescriptions
-                    .Where(r => r.Source == ApiParameterSource.FromUri)
+            var result = new List<RequestUriParameterModel>();
+
+            var complexParameters = description.ParameterDescriptions
+                    .Where(r => r.Source == ApiParameterSource.FromUri && r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Select(s => new
+                    {
+                        Properties = s.ParameterDescriptor.ParameterType.GetProperties(),
+                        IsOptional = s.ParameterDescriptor.IsOptional,
+                        Description = s.Documentation,
+                        Example = s.ParameterDescriptor.DefaultValue == null ? "" : s.ParameterDescriptor.DefaultValue.ToString()
+                    });
+
+            foreach(var parameter in complexParameters)
+            {
+                var temp = parameter.Properties.Select(q => new RequestUriParameterModel
+                {
+                    Name = q.Name,
+                    Description = parameter.Description,
+                    IsRequired = parameter.IsOptional,
+                    Type = q.PropertyType,
+                    Example = parameter.Example
+                });
+
+                result.AddRange(temp);
+            };
+
+            var notComplexParameters = description.ParameterDescriptions
+                    .Where(r => r.Source == ApiParameterSource.FromUri && !r.ParameterDescriptor.ParameterType.IsComplexModel())
                     .Select(q => new RequestUriParameterModel
                     {
                         Name = q.Name,
@@ -116,8 +142,11 @@ namespace RAMLSharp
                         IsRequired = q.ParameterDescriptor.IsOptional,
                         Type = q.ParameterDescriptor.ParameterType,
                         Example = q.ParameterDescriptor.DefaultValue == null ? "" : q.ParameterDescriptor.DefaultValue.ToString()
-                    })
-                    .ToList();
+                    });
+
+            result.AddRange(notComplexParameters);
+
+            return result;
         }
 
         private static IList<RequestHeaderModel> GetHeaders(IEnumerable<RequestHeadersAttribute> attributes)

@@ -8,6 +8,7 @@ namespace RAMLSharp.Test
     [ExcludeFromCodeCoverage]
     public class TypeExtensionsTest
     {
+        #region ToRamlType
         #region integer tests
         [TestMethod]
         public void TypeExtensions_Int32_ReturnsInteger()
@@ -100,6 +101,23 @@ namespace RAMLSharp.Test
         {
             Assert.AreEqual(typeof(object).ToRamlType(), "string", "The return string should be 'integer'.");
         }
+        #endregion
+        #endregion
+
+        #region IsComplexModel
+
+        [TestMethod]
+        public void IsComplexModel_string_ReturnsFalse()
+        {
+            Assert.AreEqual(typeof(string).IsComplexModel(), false, "The object is a primitive.");
+        }
+        
+        [TestMethod]
+        public void IsComplexModel_TypeExtensionsTest_ReturnsTrue()
+        {
+            Assert.AreEqual(typeof(TypeExtensionsTest).IsComplexModel(), true, "The object is a primitive.");
+        }
+
         #endregion
     }
 }

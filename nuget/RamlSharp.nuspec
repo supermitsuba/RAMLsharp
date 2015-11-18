@@ -2,15 +2,16 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>RamlSharp</id>
-    <version>1.0.0.0</version>
+    <version>1.0.1.0</version>
     <title>RAMLSharp</title>
     <authors>Jorden Lowe, Dominick Aleardi</authors>
     <owners>Quicken Loans</owners>
     <licenseUrl>https://raw.githubusercontent.com/QuickenLoans/RAMLsharp/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/QuickenLoans/RAMLsharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Enables WebApi projects to generate Their RAML specification.</summary>
-    <description>Description</description>
+    <summary>Enables WebApi projects to generate their RAML specification.</summary>
+    <description>Enables WebApi projects to generate their RAML specification.</description>
+    <releaseNotes>Fixed issue with complex types in URI parameters.</releaseNotes>
     <copyright>Copyright ©  2015</copyright>
     <tags>webapi raml help pages ramlsharp</tags>
     <dependencies>
