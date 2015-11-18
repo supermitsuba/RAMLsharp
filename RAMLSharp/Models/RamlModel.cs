@@ -5,15 +5,40 @@ using System.Text;
 
 namespace RAMLSharp.Models
 {
+    /// <summary>
+    /// This is the main object that is parsed from the API descriptors in the ASP.net Web API Help pages API.  We use this object to convert it into RAML.
+    /// </summary>
     public class RAMLModel
     {
+        /// <summary>
+        /// The title of the API.
+        /// </summary>
         public string Title { get; set; }
+        /// <summary>
+        /// The base URL of the API.
+        /// </summary>
         public Uri BaseUri { get; set; }
+        /// <summary>
+        /// The Version of the API
+        /// </summary>
         public string Version { get; set; }
+        /// <summary>
+        /// The default media types used to submit a request and response.
+        /// </summary>
         public string DefaultMediaType { get; set; }
+        /// <summary>
+        /// The description of your API.
+        /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// A list of routes, or in an API's case, a list of resources in the API.
+        /// </summary>
         public IList<RouteModel> Routes { get; set; }
 
+        /// <summary>
+        /// This is used to output RAML from the RAMLModel.
+        /// </summary>
+        /// <returns>Returns a raml string of the model.</returns>
         public override string ToString()
         {
             var RAML = new StringBuilder();

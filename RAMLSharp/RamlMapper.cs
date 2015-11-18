@@ -13,16 +13,33 @@ namespace RAMLSharp
     {
         private readonly IEnumerable<ApiDescription> _apiDescriptions;
 
+        /// <summary>
+        /// This constructor is the main constructor to pass in your controller and find out about your Web API.
+        /// </summary>
+        /// <param name="controller">The controller that is hosting your API.</param>
         public RAMLMapper(ApiController controller)
         {
             _apiDescriptions = controller.Configuration.Services.GetApiExplorer().ApiDescriptions;
         }
 
+        /// <summary>
+        /// This constructor is used to test.
+        /// </summary>
+        /// <param name="descriptions">A list of fake ApiDescriptions to generate a raml from.</param>
         public RAMLMapper(IEnumerable<ApiDescription> descriptions)
         {
             _apiDescriptions = descriptions ?? new List<ApiDescription>();
         }
 
+        /// <summary>
+        /// This method takes a few more pieces not described in your API and adds them to the RAML output.
+        /// </summary>
+        /// <param name="baseUri">The base URL of your API.</param>
+        /// <param name="title">The title or name of your API.</param>
+        /// <param name="version">The version of your API.</param>
+        /// <param name="defaultMediaTypes">The default media types that your API supports.  Ex: application/json or application/xml</param>
+        /// <param name="description">What is the purpose of your API.</param>
+        /// <returns></returns>
         public RAMLModel WebApiToRamlModel(Uri baseUri, string title, string version, string defaultMediaTypes, string description)
         {
             var model = new RAMLModel

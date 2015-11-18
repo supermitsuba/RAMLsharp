@@ -2,8 +2,16 @@
 
 namespace RAMLSharp
 {
+    /// <summary>
+    /// Useful extensions for Types
+    /// </summary>
     public static class TypeExtensions
     {
+        /// <summary>
+        /// Used to convert .net type into a RAML type.  Raml 0.8 has limited primitive types:  integer, number, boolean, date, string and file.
+        /// </summary>
+        /// <param name="typeValue">The .net type to convert</param>
+        /// <returns>The RAML type of the .net type</returns>
         public static string ToRamlType(this Type typeValue)
         {
             switch (Type.GetTypeCode(typeValue))
@@ -30,6 +38,11 @@ namespace RAMLSharp
             }
         }
 
+        /// <summary>
+        /// This function determines if the .net object is complex, which means that if it does not fit a RAML primitive type, then it is complex.
+        /// </summary>
+        /// <param name="typeValue">The .net type to compare</param>
+        /// <returns>True if it is complex, false if it is a primitive</returns>
         public static bool IsComplexModel(this Type typeValue)
         {
             switch (Type.GetTypeCode(typeValue))
