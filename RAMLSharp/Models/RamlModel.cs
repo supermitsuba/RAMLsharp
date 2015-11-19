@@ -112,7 +112,6 @@ namespace RAMLSharp.Models
             RAML = SetDescription(RAML, route);
             RAML = SetRequest(RAML, route);
             RAML = SetHeaders(RAML, route);
-            RAML = SetParameters(RAML, route);
             RAML = SetResponses(RAML, route);
             return RAML;
         }
@@ -190,22 +189,6 @@ namespace RAMLSharp.Models
             
             RAML.AppendFormat("        minimum: {0}{1}", header.Minimum, _newLine);
             RAML.AppendFormat("        maximum: {0}{1}", header.Maximum, _newLine);
-            return RAML;
-        }
-
-        private StringBuilder SetParameters(StringBuilder RAML, RouteModel route)
-        {
-            if (route.QueryParameters == null || route.QueryParameters.Count == 0) return RAML;
-            
-            RAML.AppendFormat("    queryParameters: {0}", _newLine);
-            foreach (var parameters in route.QueryParameters)
-            {
-                RAML.AppendFormat("        {0}: {1}", parameters.Name, _newLine);
-                RAML.AppendFormat("          type: {0}{1}", parameters.Type.ToRamlType(), _newLine);
-                RAML.AppendFormat("          required: {0}{1}", parameters.IsRequired.ToString().ToLower(), _newLine);
-                RAML.AppendFormat("          description: {0}{1}", parameters.Description, _newLine);
-                RAML.AppendFormat("          example: |{1}            {0}{1}", parameters.Example, _newLine);
-            }
             return RAML;
         }
 

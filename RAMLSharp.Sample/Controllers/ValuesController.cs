@@ -18,10 +18,10 @@ namespace RAMLSharp.Sample.Controllers
         /// </summary>
         /// <example>Example of get</example>
         /// <returns>Returns a list of values!</returns>
-        [RequestHeaders(Name = "Accept", Example = "application/json", IsRequired = true, Type = typeof(string), Description = "This is the content type we want from the server")]
-        [ResponseBody(StatusCode=HttpStatusCode.OK, ContentType = "application/json", Example = "['value1', 'value2']", Schema = "values")]
-        [ResponseBody(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
-        [ResponseBody(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
+        [RequestHeadersDocumentation(Name = "Accept", Example = "application/json", IsRequired = true, Type = typeof(string), Description = "This is the content type we want from the server")]
+        [ResponseBodyDocumentation(StatusCode=HttpStatusCode.OK, ContentType = "application/json", Example = "['value1', 'value2']", Schema = "values")]
+        [ResponseBodyDocumentation(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
+        [ResponseBodyDocumentation(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
         [Route("api/tests"), HttpGet]
         public IEnumerable<string> Get()
         {
@@ -54,7 +54,7 @@ namespace RAMLSharp.Sample.Controllers
         /// This inserts a test
         /// </summary>
         /// <param name="testCase">The test</param>
-        [RequestHeaders(Name = "Accept", 
+        [RequestHeadersDocumentation(Name = "Accept", 
             Example = "application/json", 
             IsRequired = true,
             Minimum = -1,
@@ -62,9 +62,9 @@ namespace RAMLSharp.Sample.Controllers
             Type = typeof(int), 
             Description = "This is the content type we want from the server"
         )]
-        [ResponseBody(StatusCode = HttpStatusCode.OK, ContentType = "application/json", Example = "[should be the location of this test]", Description="This is the standard request back.")]
-        [ResponseBody(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
-        [ResponseBody(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
+        [ResponseBodyDocumentation(StatusCode = HttpStatusCode.OK, ContentType = "application/json", Example = "[should be the location of this test]", Description = "This is the standard request back.")]
+        [ResponseBodyDocumentation(StatusCode = HttpStatusCode.BadRequest, ContentType = "application/json", Example = "[bad request]")]
+        [ResponseBodyDocumentation(StatusCode = HttpStatusCode.InternalServerError, ContentType = "application/json", Example = "[internal server error]")]
         [Route("api/tests"), HttpPost]
         public void Post([FromBody]string testCase)
         {

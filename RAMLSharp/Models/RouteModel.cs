@@ -24,10 +24,6 @@ namespace RAMLSharp.Models
         /// </summary>
         public IList<RequestHeaderModel> Headers { get; set; }
         /// <summary>
-        /// List of all query string parameters on the resource.
-        /// </summary>
-        public IList<RequestQueryParameterModel> QueryParameters { get; set; }
-        /// <summary>
         /// List of all Uri parameters on the resource.
         /// </summary>
         public IList<RequestUriParameterModel> UriParameters { get; set; }

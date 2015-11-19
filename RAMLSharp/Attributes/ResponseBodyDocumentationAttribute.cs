@@ -7,7 +7,7 @@ namespace RAMLSharp.Attributes
     /// This attribute is used to tell RAMLSharp what responses from the API should look like, per status code.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class ResponseBodyAttribute : Attribute
+    public class ResponseBodyDocumentationAttribute : Attribute
     {
         /// <summary>
         /// This is the status code of the response.  Ex: 200, 400, 500, etc.

@@ -20,7 +20,7 @@ namespace RAMLSharp.Test
         IEnumerable<ApiDescription> descriptions = null;
         Mock<HttpActionDescriptor> mockActionDescriptor = null;
         List<RequestHeaderModel> expectedHeader = null;
-        Collection<RequestHeadersAttribute> expectedHeaderAttributes = null;
+        Collection<RequestHeadersDocumentationAttribute> expectedHeaderAttributes = null;
         
         [TestInitialize]
         public void TestInitialize()
@@ -73,9 +73,9 @@ namespace RAMLSharp.Test
                 }
             };
 
-            expectedHeaderAttributes = new Collection<RequestHeadersAttribute>(
+            expectedHeaderAttributes = new Collection<RequestHeadersDocumentationAttribute>(
                     expectedHeader.Select(
-                    p => new RequestHeadersAttribute
+                    p => new RequestHeadersDocumentationAttribute
                     {
                         Name = p.Name,
                         Description = p.Description,
@@ -93,11 +93,11 @@ namespace RAMLSharp.Test
             {
                 expectedHeader[0]
             };
-            var headerAttribute = new Collection<RequestHeadersAttribute>
+            var headerAttribute = new Collection<RequestHeadersDocumentationAttribute>
             {
                 expectedHeaderAttributes[0]
             };
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttribute);
 
             var subject = new RAMLMapper(descriptions);
@@ -112,8 +112,8 @@ namespace RAMLSharp.Test
         public void RamlMapper_CreateOneApiWithNullHeader_DoNotDisplayHeadersSection()
         {
             expectedModel.Routes[0].Headers = null;
-            Collection<RequestHeadersAttribute> headerAttributes = null;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            Collection<RequestHeadersDocumentationAttribute> headerAttributes = null;
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -128,7 +128,7 @@ namespace RAMLSharp.Test
         {
             expectedModel.Routes[0].Headers = expectedHeader;
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(expectedHeaderAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -150,12 +150,12 @@ namespace RAMLSharp.Test
             {
                 expectedHeader[0]
             };
-            var headerAttribute = new Collection<RequestHeadersAttribute>
+            var headerAttribute = new Collection<RequestHeadersDocumentationAttribute>
             {
                 expectedHeaderAttributes[0]
             };
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttribute);
 
             var subject = new RAMLMapper(descriptions);
@@ -175,7 +175,7 @@ namespace RAMLSharp.Test
             expectedHeaderAttributes[0].Name = null;
             expectedHeaderAttributes[1].Name = null;
             
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(expectedHeaderAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -195,12 +195,12 @@ namespace RAMLSharp.Test
             {
                 expectedHeader[0]
             };
-            var headerAttribute = new Collection<RequestHeadersAttribute>
+            var headerAttribute = new Collection<RequestHeadersDocumentationAttribute>
             {
                 expectedHeaderAttributes[0]
             };
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttribute);
 
             var subject = new RAMLMapper(descriptions);
@@ -222,12 +222,12 @@ namespace RAMLSharp.Test
             {
                 expectedHeader[0]
             };
-            var headerAttribute = new Collection<RequestHeadersAttribute>
+            var headerAttribute = new Collection<RequestHeadersDocumentationAttribute>
             {
                 expectedHeaderAttributes[0]
             };
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttribute);
 
             var subject = new RAMLMapper(descriptions);
@@ -249,12 +249,12 @@ namespace RAMLSharp.Test
             {
                 expectedHeader[0]
             };
-            var headerAttribute = new Collection<RequestHeadersAttribute>
+            var headerAttribute = new Collection<RequestHeadersDocumentationAttribute>
             {
                 expectedHeaderAttributes[0]
             };
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<RequestHeadersDocumentationAttribute>())
                                 .Returns(headerAttribute);
 
             var subject = new RAMLMapper(descriptions);

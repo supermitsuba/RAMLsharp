@@ -54,13 +54,13 @@ namespace RAMLSharp
 
             foreach (var api in _apiDescriptions)
             {
-                IEnumerable<RequestHeadersAttribute> headers = null;
-                IEnumerable<ResponseBodyAttribute> responseBody = null;
+                IEnumerable<RequestHeadersDocumentationAttribute> headers = null;
+                IEnumerable<ResponseBodyDocumentationAttribute> responseBody = null;
 
                 if (api.ActionDescriptor != null)
                 {
-                    headers = api.ActionDescriptor.GetCustomAttributes<RequestHeadersAttribute>();
-                    responseBody = api.ActionDescriptor.GetCustomAttributes<ResponseBodyAttribute>();
+                    headers = api.ActionDescriptor.GetCustomAttributes<RequestHeadersDocumentationAttribute>();
+                    responseBody = api.ActionDescriptor.GetCustomAttributes<ResponseBodyDocumentationAttribute>();
                 }
 
                 var routeModel = new RouteModel
@@ -89,7 +89,7 @@ namespace RAMLSharp
 
         #region Private Functions.  These are used to parse the data.
 
-        private static IList<ResponseModel> GetResponseBodies(IEnumerable<ResponseBodyAttribute> attributes)
+        private static IList<ResponseModel> GetResponseBodies(IEnumerable<ResponseBodyDocumentationAttribute> attributes)
         {
             var responseModel = new List<ResponseModel>();
             if (attributes != null)
@@ -136,7 +136,7 @@ namespace RAMLSharp
                         Example = s.ParameterDescriptor.DefaultValue == null ? "" : s.ParameterDescriptor.DefaultValue.ToString()
                     });
 
-            foreach(var parameter in complexParameters)
+            foreach (var parameter in complexParameters)
             {
                 var temp = parameter.Properties.Select(q => new RequestUriParameterModel
                 {
@@ -144,7 +144,7 @@ namespace RAMLSharp
                     Description = parameter.Description,
                     IsRequired = parameter.IsOptional,
                     Type = q.PropertyType,
-                    Example = parameter.Example
+                    Example = parameter.Example,
                 });
 
                 result.AddRange(temp);
@@ -166,7 +166,7 @@ namespace RAMLSharp
             return result;
         }
 
-        private static IList<RequestHeaderModel> GetHeaders(IEnumerable<RequestHeadersAttribute> attributes)
+        private static IList<RequestHeaderModel> GetHeaders(IEnumerable<RequestHeadersDocumentationAttribute> attributes)
         {
             var requestHeaderModel = new List<RequestHeaderModel>();
             if (attributes != null)
@@ -182,7 +182,13 @@ namespace RAMLSharp
                                @Type = h.Type,
                                IsRequired = h.IsRequired,
                                Maximum = h.Maximum,
-                               Minimum = h.Minimum
+                               Minimum = h.Minimum,
+
+                               DefaultValue = h.DefaultValue,
+                               MaxLength = h.MaxLength,
+                               MinLength = h.MinLength,
+                               Pattern = h.Pattern,
+                               Repeat = h.Repeat
                            };
 
                            return newModel;

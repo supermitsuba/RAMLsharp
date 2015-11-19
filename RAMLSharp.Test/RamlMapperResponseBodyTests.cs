@@ -20,7 +20,7 @@ namespace RAMLSharp.Test
         IEnumerable<ApiDescription> descriptions = null;
         Mock<HttpActionDescriptor> mockActionDescriptor = null;
         List<ResponseModel> expectedResponseBody = null;
-        Collection<ResponseBodyAttribute> expectedResponseBodyAttributes = null;
+        Collection<ResponseBodyDocumentationAttribute> expectedResponseBodyAttributes = null;
 
         [TestInitialize]
         public void TestInitialize()
@@ -71,9 +71,9 @@ namespace RAMLSharp.Test
                 }
             };
 
-            expectedResponseBodyAttributes = new Collection<ResponseBodyAttribute>(
+            expectedResponseBodyAttributes = new Collection<ResponseBodyDocumentationAttribute>(
                     expectedResponseBody.Select(
-                    p => new ResponseBodyAttribute
+                    p => new ResponseBodyDocumentationAttribute
                     {
                         ContentType = p.ContentType,
                         Description = p.Description,
@@ -90,11 +90,11 @@ namespace RAMLSharp.Test
             {
                 expectedResponseBody[0]
             };
-            var responseBodyAttribute = new Collection<ResponseBodyAttribute>
+            var responseBodyAttribute = new Collection<ResponseBodyDocumentationAttribute>
             {
                 expectedResponseBodyAttributes[0]
             };
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(responseBodyAttribute);
 
             var subject = new RAMLMapper(descriptions);
@@ -109,7 +109,7 @@ namespace RAMLSharp.Test
         public void RamlMapper_CreateTwoResponseBody_GenerateRAML()
         {
             expectedModel.Routes[0].Responses = expectedResponseBody;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -125,7 +125,7 @@ namespace RAMLSharp.Test
         public void RamlMapper_CreateNullResponseBody_GenerateRAML()
         {
             expectedResponseBodyAttributes = null;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -141,9 +141,9 @@ namespace RAMLSharp.Test
         public void RamlMapper_CreateEmptyResponseBody_GenerateRAML()
         {
             expectedResponseBody = new List<ResponseModel>();
-            expectedResponseBodyAttributes = new Collection<ResponseBodyAttribute>();
+            expectedResponseBodyAttributes = new Collection<ResponseBodyDocumentationAttribute>();
 
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -164,7 +164,7 @@ namespace RAMLSharp.Test
             expectedResponseBodyAttributes[1].ContentType = null;
 
             expectedModel.Routes[0].Responses = expectedResponseBody;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -185,7 +185,7 @@ namespace RAMLSharp.Test
             expectedResponseBodyAttributes[1].Example = null;
 
             expectedModel.Routes[0].Responses = expectedResponseBody;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);
@@ -206,7 +206,7 @@ namespace RAMLSharp.Test
             expectedResponseBodyAttributes[1].Example = null;
 
             expectedModel.Routes[0].Responses = expectedResponseBody;
-            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyAttribute>())
+            mockActionDescriptor.Setup(p => p.GetCustomAttributes<ResponseBodyDocumentationAttribute>())
                                 .Returns(expectedResponseBodyAttributes);
 
             var subject = new RAMLMapper(descriptions);

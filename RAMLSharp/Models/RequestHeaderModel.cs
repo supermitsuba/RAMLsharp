@@ -35,5 +35,32 @@ namespace RAMLSharp.Models
         /// The maximum value of the header if it is of type number or integer
         /// </summary>
         public int Maximum { get; set; }
+
+
+        /// <summary>
+        /// Only for string.  A regex expression of a pattern that the header value must follow.  Ex: phone number would be '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'
+        /// </summary>
+        public string Pattern { get; set; }
+
+        /// <summary>
+        /// Only for string.  A minimum length of text.
+        /// </summary>
+        public int MinLength { get; set; }
+
+        /// <summary>
+        /// Only for string.  A maximum length of text.
+        /// </summary>
+        public int MaxLength { get; set; }
+
+        /// <summary>
+        /// Whether the header value can be repeated.  True or false.
+        /// </summary>
+        public bool Repeat { get; set; }
+
+        /// <summary>
+        /// The default value for the header.
+        /// </summary>
+        public string DefaultValue { get; set; }
+
     }
 }

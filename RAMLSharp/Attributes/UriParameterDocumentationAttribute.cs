@@ -1,33 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RAMLSharp.Models
+namespace RAMLSharp.Attributes
 {
     /// <summary>
-    /// This model represents a request uri parameter.
+    /// 
     /// </summary>
-    public class RequestUriParameterModel
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    public class UriParameterDocumentationAttribute : Attribute
     {
         /// <summary>
-        /// The name of the URI parameter.
+        /// This is the name of the parameter.  Ex: Accept
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// The description of what the URI parameter.
+        /// This is the description of your parameter and why you need it.
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// The .net type of the URI parameter.  This is later converted to RAML type.
+        /// This is the .net type of the parameter value.  This is automatically converted later to RAML type.
         /// </summary>
         public Type @Type { get; set; }
         /// <summary>
-        /// If the URI parameter is required, true, otherwise false.
+        /// Is this parameter required to execute the API.
         /// </summary>
         public bool IsRequired { get; set; }
-        /// <summary>
-        /// Example of values for the URI parameter.
-        /// </summary>
-        public string Example { get; set; }
-
         /// <summary>
         /// This is for number or integer fields.  It specifies an acceptable minimum number.
         /// </summary>
@@ -36,6 +36,10 @@ namespace RAMLSharp.Models
         /// This is for number or integer fields.  It specifies an acceptable maximum number.
         /// </summary>
         public int Maximum { get; set; }
+        /// <summary>
+        /// This is an example of what the values are in the API.
+        /// </summary>
+        public string Example { get; set; }
 
         /// <summary>
         /// Only for string.  A regex expression of a pattern that the parameter value must follow.  Ex: phone number would be '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'

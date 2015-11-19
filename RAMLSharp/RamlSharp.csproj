@@ -61,18 +61,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\UriParameterDocumentationAttribute.cs" />
     <Compile Include="Configuration\HelpPageConfigurationExtensions.cs" />
     <Compile Include="Configuration\IModelDocumentationProvider.cs" />
     <Compile Include="Configuration\XmlDocumentationProvider.cs" />
     <Compile Include="Models\RequestBodyParameterModel.cs" />
     <Compile Include="Models\RequestUriParameterModel.cs" />
     <Compile Include="RamlMapper.cs" />
-    <Compile Include="Attributes\RequestHeadersAttribute.cs" />
-    <Compile Include="Attributes\ResponseBodyAttribute.cs" />
+    <Compile Include="Attributes\RequestHeadersDocumentationAttribute.cs" />
+    <Compile Include="Attributes\ResponseBodyDocumentationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\RamlModel.cs" />
     <Compile Include="Models\RequestHeaderModel.cs" />
-    <Compile Include="Models\RequestQueryParametersModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\RouteModel.cs" />
     <Compile Include="TypeExtensions.cs" />
