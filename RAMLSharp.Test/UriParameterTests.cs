@@ -190,5 +190,61 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("        type: string"));
             Assert.IsTrue(!result.ToString().Contains("        type: date"));
         }
+
+        [TestMethod]
+        public void UriParameters_ParameterDescriptor_IfPropertyIsNullThenSkip()
+        {
+            var parameterDescriptions = new Collection<ApiParameterDescription>()
+            {
+                sampleApiParameterDescription
+            };
+            sampleDescription = new FakeApiDescription(parameterDescriptions)
+            {
+                HttpMethod = new System.Net.Http.HttpMethod("get"),
+                RelativePath = "api/test"
+            };
+            
+            sampleApiParameterDescription.ParameterDescriptor = null;
+
+            descriptions = new List<ApiDescription>() { sampleDescription };
+
+            var subject = new RAMLMapper(descriptions);
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
+
+            Assert.IsFalse(String.IsNullOrEmpty(result.ToString()));
+        }
+
+
+        [TestMethod]
+        public void UriParameters_ParameterDescriptor_IfTypeIsNullThenSkip()
+        {
+            var parameterDescriptions = new Collection<ApiParameterDescription>()
+            {
+                sampleApiParameterDescription
+            };
+            sampleDescription = new FakeApiDescription(parameterDescriptions)
+            {
+                HttpMethod = new System.Net.Http.HttpMethod("get"),
+                RelativePath = "api/test"
+            };
+
+            mockHttpParameterDescriptor.Setup(p => p.IsOptional)
+                                       .Returns(true);
+            mockHttpParameterDescriptor.Setup(p => p.DefaultValue)
+                                       .Returns(null);
+            mockHttpParameterDescriptor.Setup(p => p.ParameterType)
+                                       .Returns<Type>(null);
+
+            sampleApiParameterDescription.ParameterDescriptor = mockHttpParameterDescriptor.Object;
+
+            descriptions = new List<ApiDescription>() { sampleDescription };
+
+            var subject = new RAMLMapper(descriptions);
+            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
+            
+            Assert.IsFalse(String.IsNullOrEmpty(result.ToString()));
+        }
+
+
     }
 }

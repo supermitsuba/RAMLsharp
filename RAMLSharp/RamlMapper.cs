@@ -127,7 +127,10 @@ namespace RAMLSharp
             var result = new List<RequestUriParameterModel>();
 
             var complexParameters = description.ParameterDescriptions
-                    .Where(r => r.Source == ApiParameterSource.FromUri && r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => r.Source == ApiParameterSource.FromUri)
+                    .Where(r => r.ParameterDescriptor != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType.IsComplexModel())
                     .Select(s => new
                     {
                         Properties = s.ParameterDescriptor.ParameterType.GetProperties(),
@@ -151,7 +154,10 @@ namespace RAMLSharp
             };
 
             var notComplexParameters = description.ParameterDescriptions
-                    .Where(r => r.Source == ApiParameterSource.FromUri && !r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => r.Source == ApiParameterSource.FromUri)
+                    .Where(r => r.ParameterDescriptor != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType != null)
+                    .Where(r => !r.ParameterDescriptor.ParameterType.IsComplexModel())
                     .Select(q => new RequestUriParameterModel
                     {
                         Name = q.Name,
