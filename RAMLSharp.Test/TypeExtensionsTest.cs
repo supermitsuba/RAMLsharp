@@ -118,6 +118,41 @@ namespace RAMLSharp.Test
             Assert.AreEqual(typeof(TypeExtensionsTest).IsComplexModel(), true, "The object is a primitive.");
         }
 
+        [TestMethod]
+        public void IsComplexModel_NullableInt_ReturnsFalse()
+        {
+            Type value = typeof(Nullable<int>);
+            Assert.AreEqual( value.IsComplexModel(), false, "The object is a primitive.");
+        }
+
+        [TestMethod]
+        public void IsComplexModel_NullableLong_ReturnsFalse()
+        {
+            Type value = typeof(Nullable<long>);
+            Assert.AreEqual(value.IsComplexModel(), false, "The object is a primitive.");
+        }
+
+        [TestMethod]
+        public void IsComplexModel_NullableDateTime_ReturnsFalse()
+        {
+            Type value = typeof(Nullable<DateTime>);
+            Assert.AreEqual(value.IsComplexModel(), false, "The object is a primitive.");
+        }
+
+        [TestMethod]
+        public void IsComplexModel_NullableBool_ReturnsFalse()
+        {
+            Type value = typeof(Nullable<bool>);
+            Assert.AreEqual(value.IsComplexModel(), false, "The object is a primitive.");
+        }
+
+        [TestMethod]
+        public void IsComplexModel_NullableDecimal_ReturnsFalse()
+        {
+            Type value = typeof(Nullable<decimal>);
+            Assert.AreEqual(value.IsComplexModel(), false, "The object is a primitive.");
+        }
+
         #endregion
     }
 }

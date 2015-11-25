@@ -45,7 +45,14 @@ namespace RAMLSharp
         /// <returns>True if it is complex, false if it is a primitive</returns>
         public static bool IsComplexModel(this Type typeValue)
         {
-            switch (Type.GetTypeCode(typeValue))
+            Type value = typeValue;
+
+            if (value.IsGenericType && value.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                value = Nullable.GetUnderlyingType(value);
+            }
+
+            switch (Type.GetTypeCode(value))
             {
                 case TypeCode.Byte:
                 case TypeCode.SByte:
@@ -65,6 +72,23 @@ namespace RAMLSharp
                 default:
                     return true;
             }
+        }
+
+        /// <summary>
+        /// If the type is Null, then it gives back a weird type that sometimes is a null and sometimes not.  this clarifies that ambiguity.
+        /// </summary>
+        /// <param name="typeValue">The type to get the Real type from.</param>
+        /// <returns>Returns the real type, even if the thing is nullable</returns>
+        public static Type GetForRealType(this Type typeValue)
+        {
+            Type value = typeValue;
+
+            if (value.IsGenericType && value.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                value = Nullable.GetUnderlyingType(value);
+            }
+
+            return value;
         }
     }
 }

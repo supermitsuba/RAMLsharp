@@ -101,5 +101,15 @@ namespace RAMLSharp.Sample.Controllers
                  Content=new StringContent("doing something")
             };
         }
+
+        [Route("list2")]
+        [HttpGet]
+        public HttpResponseMessage GetSomething([FromUri]long? searchRequest)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("doing something")
+            };
+        }
     }
 }

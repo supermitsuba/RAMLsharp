@@ -163,7 +163,7 @@ namespace RAMLSharp
                         Name = q.Name,
                         Description = q.Documentation,
                         IsRequired = q.ParameterDescriptor.IsOptional,
-                        Type = q.ParameterDescriptor.ParameterType,
+                        Type = q.ParameterDescriptor.ParameterType.GetForRealType(),
                         Example = q.ParameterDescriptor.DefaultValue == null ? "" : q.ParameterDescriptor.DefaultValue.ToString()
                     });
 
