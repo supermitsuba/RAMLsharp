@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using RAMLSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Http.Description;
+using System.Web.Http.Routing;
 
 namespace RAMLSharp.Test
 {
@@ -12,6 +14,7 @@ namespace RAMLSharp.Test
     public class RamlMapperTests
     {
         RAMLModel expectedModel = null;
+        Mock<IHttpRoute> mockRoute = null;
 
         [TestInitialize]
         public void TestInitialize()
@@ -25,6 +28,8 @@ namespace RAMLSharp.Test
                 Version = "1",
                 Routes = new List<RouteModel>()
             };
+            mockRoute = new Mock<IHttpRoute>();
+            mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
         }
 
         #region null checks for base information
@@ -203,7 +208,8 @@ namespace RAMLSharp.Test
                 new ApiDescription
                 {
                      HttpMethod = new System.Net.Http.HttpMethod("get"),
-                     RelativePath = "api/test"
+                     RelativePath = "api/test",
+                     Route = mockRoute.Object
                 }
             };
 

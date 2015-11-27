@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>RamlSharp</id>
-    <version>1.0.4.0</version>
+    <version>1.0.5.0</version>
     <title>RAMLSharp</title>
     <authors>Jorden Lowe, Dominick Aleardi</authors>
     <owners>Quicken Loans</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Enables WebApi projects to generate their RAML specification.</summary>
     <description>Enables WebApi projects to generate their RAML specification.</description>
-    <releaseNotes>Fixed issue with complex types in URI parameters.  Added xml documenation to the project for intellsense.  Fixed Null Reference Exception on URI Parameters.  Properly Handle Nullable Types.</releaseNotes>
+    <releaseNotes>Fixed issue with complex types in URI parameters.  Added xml documenation to the project for intellsense.  Fixed Null Reference Exception on URI Parameters.  Properly Handle Nullable Types.  Separated out Query String and URI parameters.  Fixed URI duplication.</releaseNotes>
     <copyright>Copyright ©  2015</copyright>
     <tags>webapi raml help pages ramlsharp</tags>
     <dependencies>
