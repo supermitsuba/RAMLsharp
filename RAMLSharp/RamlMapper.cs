@@ -86,6 +86,9 @@ namespace RAMLSharp
             return model;
         }
 
+
+        #region Private Functions.  These are used to parse the data.
+
         private IList<RequestQueryParameterModel> GetQueryParameters(ApiDescription description)
         {
             var result = new List<RequestQueryParameterModel>();
@@ -137,9 +140,6 @@ namespace RAMLSharp
 
             return result;
         }
-
-
-        #region Private Functions.  These are used to parse the data.
 
         private static IList<ResponseModel> GetResponseBodies(IEnumerable<ResponseBodyAttribute> attributes)
         {

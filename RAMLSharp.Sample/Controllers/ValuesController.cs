@@ -102,6 +102,26 @@ namespace RAMLSharp.Sample.Controllers
             };
         }
 
+        [Route("list/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSomething1([FromUri]BunchOfFields searchRequest, [FromUri] string id)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("doing something")
+            };
+        }
+
+        [Route("list/{id}")]
+        [HttpPost]
+        public HttpResponseMessage GetSomething2([FromUri]BunchOfFields searchRequest, [FromUri] string id)
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("doing something")
+            };
+        }
+
         [Route("list2")]
         [HttpGet]
         public HttpResponseMessage GetSomething([FromUri]long? searchRequest)
