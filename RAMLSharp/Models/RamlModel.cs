@@ -34,7 +34,7 @@ namespace RAMLSharp.Models
         /// A list of routes, or in an API's case, a list of resources in the API.
         /// </summary>
         public IList<RouteModel> Routes { get; set; }
-
+        
         /// <summary>
         /// This is used to output RAML from the RAMLModel.
         /// </summary>
@@ -80,7 +80,8 @@ namespace RAMLSharp.Models
 
             return RAML.Append(rootString);
         }
-
+        
+        private Dictionary<string, bool> hasVisitedRoutes;
         private StringBuilder SetRamlBody(StringBuilder RAML)
         {
             if (Routes == null || Routes.Count == 0) return RAML;
@@ -91,6 +92,8 @@ namespace RAMLSharp.Models
             foreach (var urls in routeGrouping)
             {
                 RAML = SetResources(RAML, urls);
+
+                hasVisitedRoutes = new Dictionary<string, bool>();
                 RAML = urls.Verbs.Aggregate(RAML, SetRoutes);
             }
 
@@ -107,7 +110,12 @@ namespace RAMLSharp.Models
 
         private StringBuilder SetRoutes(StringBuilder RAML, RouteModel route)
         {
-            RAML = SetUriParameters(RAML, route);
+            if (!hasVisitedRoutes.ContainsKey(route.UrlTemplate) || !hasVisitedRoutes[route.UrlTemplate])
+            {
+                RAML = SetUriParameters(RAML, route);
+                hasVisitedRoutes.Add(route.UrlTemplate, true);
+            }
+
             RAML = SetHttpVerb(RAML, route);
             RAML = SetDescription(RAML, route);
             RAML = SetRequest(RAML, route);

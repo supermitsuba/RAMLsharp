@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+using System.Web.Http.Routing;
 
 namespace RAMLSharp.Test
 {
@@ -21,11 +22,14 @@ namespace RAMLSharp.Test
         Mock<HttpActionDescriptor> mockActionDescriptor = null;
         List<RequestHeaderModel> expectedHeader = null;
         Collection<RequestHeadersAttribute> expectedHeaderAttributes = null;
+        Mock<IHttpRoute> mockRoute = null;
         
         [TestInitialize]
         public void TestInitialize()
         {
             mockActionDescriptor = new Mock<HttpActionDescriptor>();
+            mockRoute = new Mock<IHttpRoute>();
+            mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
 
             expectedModel = new RAMLModel
             {
@@ -51,7 +55,8 @@ namespace RAMLSharp.Test
                 {
                      HttpMethod = new System.Net.Http.HttpMethod("get"),
                      RelativePath = "api/test",
-                     ActionDescriptor = mockActionDescriptor.Object
+                     ActionDescriptor = mockActionDescriptor.Object,
+                     Route = mockRoute.Object
                 }
             };
 

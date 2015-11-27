@@ -9,6 +9,7 @@ using System.Web.Http.Controllers;
 using System.Collections.ObjectModel;
 using RAMLSharp.Test.Fakes;
 using System.Diagnostics.CodeAnalysis;
+using System.Web.Http.Routing;
 
 namespace RAMLSharp.Test
 {
@@ -21,11 +22,14 @@ namespace RAMLSharp.Test
         FakeApiDescription sampleDescription = null;
         ApiParameterDescription sampleApiParameterDescription = null;
         Mock<HttpParameterDescriptor> mockHttpParameterDescriptor = null;
+        Mock<IHttpRoute> mockRoute = null;
 
         [TestInitialize]
         public void TestInitialize()
         {
             mockHttpParameterDescriptor = new Mock<HttpParameterDescriptor>();
+            mockRoute = new Mock<IHttpRoute>();
+            mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
 
             expectedModel = new RAMLModel
             {
@@ -63,7 +67,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
 
             mockHttpParameterDescriptor.Setup(p => p.IsOptional)
@@ -98,7 +103,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
 
             mockHttpParameterDescriptor.Setup(p => p.IsOptional)
@@ -129,7 +135,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
 
             mockHttpParameterDescriptor.Setup(p => p.IsOptional)
@@ -165,7 +172,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
 
             mockHttpParameterDescriptor.Setup(p => p.IsOptional)
@@ -201,7 +209,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
             
             sampleApiParameterDescription.ParameterDescriptor = null;
@@ -225,7 +234,8 @@ namespace RAMLSharp.Test
             sampleDescription = new FakeApiDescription(parameterDescriptions)
             {
                 HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test"
+                RelativePath = "api/test",
+                Route = mockRoute.Object
             };
 
             mockHttpParameterDescriptor.Setup(p => p.IsOptional)

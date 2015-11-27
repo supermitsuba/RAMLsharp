@@ -66,9 +66,9 @@ namespace RAMLSharp
                 var routeModel = new RouteModel
                 {
                     Verb = api.HttpMethod.Method.ToLower(),
-                    UrlTemplate = api.RelativePath,
+                    UrlTemplate = api.Route.RouteTemplate,
                     Headers = GetHeaders(headers),
-                    //QueryParameters = GetQueryParameters(api),
+                    QueryParameters = GetQueryParameters(api),
                     BodyParameters = GetBodyParameters(api),
                     UriParameters = GetUriParameters(api),
                     Responses = GetResponseBodies(responseBody),
@@ -88,6 +88,58 @@ namespace RAMLSharp
 
 
         #region Private Functions.  These are used to parse the data.
+
+        private IList<RequestQueryParameterModel> GetQueryParameters(ApiDescription description)
+        {
+            var result = new List<RequestQueryParameterModel>();
+
+            var complexParameters = description.ParameterDescriptions
+                    .Where(r => r.Source == ApiParameterSource.FromUri)
+                    .Where(r => r.ParameterDescriptor != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => !description.Route.RouteTemplate.Contains(string.Format("{{{0}}}", r.ParameterDescriptor.ParameterName)))
+                    .Select(s => new
+                    {
+                        Properties = s.ParameterDescriptor.ParameterType.GetProperties(),
+                        IsOptional = s.ParameterDescriptor.IsOptional,
+                        Description = s.Documentation,
+                        Example = s.ParameterDescriptor.DefaultValue == null ? "" : s.ParameterDescriptor.DefaultValue.ToString()
+                    });
+
+            foreach (var parameter in complexParameters)
+            {
+                var temp = parameter.Properties.Select(q => new RequestQueryParameterModel
+                {
+                    Name = q.Name,
+                    Description = parameter.Description,
+                    IsRequired = parameter.IsOptional,
+                    Type = q.PropertyType,
+                    Example = parameter.Example
+                });
+
+                result.AddRange(temp);
+            };
+
+            var notComplexParameters = description.ParameterDescriptions
+                    .Where(r => r.Source == ApiParameterSource.FromUri)
+                    .Where(r => r.ParameterDescriptor != null)
+                    .Where(r => r.ParameterDescriptor.ParameterType != null)
+                    .Where(r => !r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => !description.Route.RouteTemplate.Contains(string.Format("{{{0}}}", r.ParameterDescriptor.ParameterName)))
+                    .Select(q => new RequestQueryParameterModel
+                    {
+                        Name = q.Name,
+                        Description = q.Documentation,
+                        IsRequired = q.ParameterDescriptor.IsOptional,
+                        Type = q.ParameterDescriptor.ParameterType.GetForRealType(),
+                        Example = q.ParameterDescriptor.DefaultValue == null ? "" : q.ParameterDescriptor.DefaultValue.ToString()
+                    });
+
+            result.AddRange(notComplexParameters);
+
+            return result;
+        }
 
         private static IList<ResponseModel> GetResponseBodies(IEnumerable<ResponseBodyAttribute> attributes)
         {
@@ -131,6 +183,7 @@ namespace RAMLSharp
                     .Where(r => r.ParameterDescriptor != null)
                     .Where(r => r.ParameterDescriptor.ParameterType != null)
                     .Where(r => r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => description.Route.RouteTemplate.Contains(string.Format("{{{0}}}", r.ParameterDescriptor.ParameterName)))
                     .Select(s => new
                     {
                         Properties = s.ParameterDescriptor.ParameterType.GetProperties(),
@@ -158,6 +211,7 @@ namespace RAMLSharp
                     .Where(r => r.ParameterDescriptor != null)
                     .Where(r => r.ParameterDescriptor.ParameterType != null)
                     .Where(r => !r.ParameterDescriptor.ParameterType.IsComplexModel())
+                    .Where(r => description.Route.RouteTemplate.Contains(string.Format("{{{0}}}", r.ParameterDescriptor.ParameterName)))
                     .Select(q => new RequestUriParameterModel
                     {
                         Name = q.Name,
