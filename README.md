@@ -24,32 +24,13 @@ If there is a feature that is missing, check out the How to Contribute section.
 
 ##Setup
 
-First, add the nuget package from https://www.nuget.org/packages/RamlSharp/:
+1)  First, add the nuget package from https://www.nuget.org/packages/RamlSharp/:
 
 ```
 PM> Install-Package RamlSharp
 ```
 
-Here is how you can serve up a route for your RAML File:
-```csharp
-[ApiExplorerSettings(IgnoreApi=true)]
-[Route("api/raml"), HttpGet]
-public HttpResponseMessage RAML()
-{
-    var result = new HttpResponseMessage(HttpStatusCode.OK);
-            
-    var r = new RAMLMapper(this);
-    var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
-                .ToString();
-
-    result.Content = new StringContent(data);
-    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/raml+yaml");
-    result.Content.Headers.ContentLength = data.Length;
-    return result;
-}
-```
-
-Next, you need to add this line to your WebApiConfig.cs:
+2)  To get XML Documentation, you need to add this line to your WebApiConfig.cs:
 
 ```csharp
 public static void Register(HttpConfiguration config)
@@ -60,9 +41,11 @@ public static void Register(HttpConfiguration config)
 }
 ```
 
-This line will read in the xml documentation to describe your API.  You can enable that in your project properties.  Make sure you note where you will save that xml file so you can put that into your xml documentation path.
+3)  Enable XML documentation under the project properties of the Web API project.  Click on the build tab, and make sure the path matches to step 2.
 
-Lastly, add some XML documentation to your API calls:
+4)  The controller call for RAML is already added.  You can visit your http://{Your API BaseUrl}/api/RAML
+
+5)  Lastly, add some XML documentation to your API calls:
 
 ```csharp
 /// <summary>

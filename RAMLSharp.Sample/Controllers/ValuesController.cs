@@ -27,29 +27,7 @@ namespace RAMLSharp.Sample.Controllers
         {
             return new[] { "value1", "value2" };
         }
-
-        // GET api/RAML
-        /// <summary>
-        /// Gets Raml
-        /// </summary>
-        /// <returns>Returns a string of RAML</returns>
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [Route("api/RAML"), HttpGet]
-        public HttpResponseMessage Raml()
-        {
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            
-            var r = new RAMLMapper(this);
-            var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
-                        .ToString();
-
-
-            result.Content = new StringContent(data);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/Raml+yaml");
-            result.Content.Headers.ContentLength = data.Length;
-            return result;
-        }
-
+        
         /// <summary>
         /// This inserts a test
         /// </summary>
