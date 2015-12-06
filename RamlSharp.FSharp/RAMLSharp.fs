@@ -8,7 +8,9 @@ open System.Web.Http
 open System.Web.Http.Description
 open RAMLSharp.Models
 
-type RAMLMapper () =
+type RAMLMapper (description : IEnumerable<ApiDescription>) =
+    let mutable _apiDescriptions = description
+
     /// <summary>
     /// This constructor is the main constructor to pass in your controller and find out about your Web API.
     /// </summary>
@@ -20,8 +22,7 @@ type RAMLMapper () =
     /// This constructor is used to test.
     /// </summary>
     /// <param name="descriptions">A list of fake ApiDescriptions to generate a raml from.</param>
-    new(description : IEnumerable<ApiDescription>) = 
-        RAMLMapper(description)
+
 
     member this.WebApiToRamlModel(baseUri : Uri, title : string, version : string, defaultMediaTypes : string, description : string) =
         new RAMLModel("",new Uri(""),"","", "", new List<RouteModel>())

@@ -19,7 +19,6 @@ type RequestHeadersAttribute (name: string option, description: string option, `
 
     new() = RequestHeadersAttribute(None, None, None, None, None, None, None)
 
-
     /// <summary>
     /// This is the name of the header.  Ex: Accept
     /// </summary>
