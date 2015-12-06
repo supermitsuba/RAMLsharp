@@ -354,18 +354,20 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
             | true  -> setUriParameters(sb, route)
                        hasVisitedRoutes.Add(route.UrlTemplate, true)
                        ()
-            | false -> setHttpVerb(sb, route)
-                       setDescription(sb, route)
-                       setRequest(sb, route)
-                       setHeaders(sb, route)
-                       setParameters(sb, route)
-                       setResponses(sb, route)
-                       ()
+            | false -> ()
+
+            setHttpVerb(sb, route)
+            setDescription(sb, route)
+            setRequest(sb, route)
+            setHeaders(sb, route)
+            setParameters(sb, route)
+            setResponses(sb, route)
+            ()
 
         let setResources (resource, verb, sb:StringBuilder) = 
-            sb.Append("/") |> ignore
-            sb.Append(resource.ToString()) |> ignore
-            sb.AppendLine(":") |> ignore
+            sb.Append("/")
+              .Append(resource.ToString()) 
+              .AppendLine(":") |> ignore
             hasVisitedRoutes.Clear()
             verb
             |> Seq.iter (fun x -> setRoutes (sb, x) )
@@ -378,8 +380,7 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
             | false -> (this.Routes
                         |> Seq.sortBy( fun p -> p.UrlTemplate )
                         |> Seq.groupBy( fun p -> p.UrlTemplate)
-                        |> Seq.map( fun (key, item) ->  setResources(key, item, sb))
-                        |> ignore
+                        |> Seq.iter( fun (key, item) ->  setResources(key, item, sb))
 
                         sb)
 
