@@ -19,12 +19,11 @@ namespace RAMLSharp.Sample.Controllers
 			var result = new HttpResponseMessage(HttpStatusCode.OK);
 
 			var r = new RAMLMapper(this);
-			var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
-				.ToString();
+			var data = r.WebApiToRamlModel (new Uri ("http://www.google.com"), "Test API", "1", "application/json", "This is a test");
 
-			result.Content = new StringContent(data);
+			result.Content = new StringContent(data.ToString());
 			result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/raml+yaml");
-			result.Content.Headers.ContentLength = data.Length;
+			result.Content.Headers.ContentLength = data.ToString().Length;
 			return result;
 		}
     }

@@ -232,4 +232,4 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
     /// This is used to output RAML from the RAMLModel.
     /// </summary>
     /// <returns>Returns a raml string of the model.</returns>
-    override this.ToString() = ""
+    override this.ToString() = "a"
