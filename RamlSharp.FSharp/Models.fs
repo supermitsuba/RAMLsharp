@@ -246,11 +246,11 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
 
             match this.Version with 
             | null -> () 
-            | _ -> sb.AppendFormat("version: [{0}]{1}", this.Version , Environment.NewLine) |> ignore
+            | _ -> sb.AppendFormat("version: {0}{1}", this.Version , Environment.NewLine) |> ignore
 
             match this.DefaultMediaType with 
             | null -> () 
-            | _ -> sb.AppendFormat("mediaType: [{0}]{1}", this.DefaultMediaType , Environment.NewLine) |> ignore
+            | _ -> sb.AppendFormat("mediaType: {0}{1}", this.DefaultMediaType , Environment.NewLine) |> ignore
 
             match this.Description with 
             | null -> sb 
