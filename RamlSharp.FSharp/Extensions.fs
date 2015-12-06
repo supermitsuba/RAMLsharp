@@ -1,16 +1,54 @@
 ﻿module RAMLSharp.Extensions
 
 open System
-open System.Diagnostics.CodeAnalysis
-open System.Web.Http
-open System.Web.Http.Description
+open System.Runtime.CompilerServices
 
-type Type with
-    member x.ToRamlType(typeValue) = 
-        ""
+[<Extension()>] 
+type TypeExtension =
 
-    member x.IsComplexModel(typeValue) = 
-        true
+    [<Extension()>] 
+    static member ToRamlType(typeValue) = 
+        match Type.GetTypeCode(typeValue) with
+        | TypeCode.Byte 
+        | TypeCode.SByte
+        | TypeCode.UInt16
+        | TypeCode.UInt32
+        | TypeCode.UInt64
+        | TypeCode.Int16
+        | TypeCode.Int32
+        | TypeCode.Int64    -> "integer"
+        | TypeCode.Decimal
+        | TypeCode.Double
+        | TypeCode.Single   -> "number"
+        | TypeCode.Boolean  -> "boolean"
+        | TypeCode.DateTime -> "date"
+        | _                 -> "string"
 
-    member x.GetForRealType(typeValue) = 
-        "".GetType()
+    [<Extension()>] 
+    static member IsComplexModel(typeValue:Type) = 
+        let checkType (t) =
+            match Type.GetTypeCode(t) with
+            | TypeCode.Byte 
+            | TypeCode.SByte
+            | TypeCode.UInt16
+            | TypeCode.UInt32
+            | TypeCode.UInt64
+            | TypeCode.Int16
+            | TypeCode.Int32
+            | TypeCode.Int64    
+            | TypeCode.Decimal
+            | TypeCode.Double
+            | TypeCode.Single   
+            | TypeCode.Boolean  
+            | TypeCode.DateTime -> false
+            | _                 -> true
+
+        match typeValue.IsGenericType && typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>> with
+        | true  -> checkType(Nullable.GetUnderlyingType(typeValue))
+        | false -> checkType(typeValue)
+
+    [<Extension()>] 
+    static member GetForRealType(typeValue:Type) = 
+        match typeValue.IsGenericType && typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>> with
+        | true  -> Nullable.GetUnderlyingType(typeValue)
+        | false -> typeValue
