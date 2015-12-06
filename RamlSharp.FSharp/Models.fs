@@ -5,6 +5,7 @@ open System.Collections.Generic
 open System.Text
 open System.Linq
 open System.Net
+open RAMLSharp.Extensions
 
 /// <summary>
 /// This model represents what a request body may look like.
@@ -232,4 +233,158 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
     /// This is used to output RAML from the RAMLModel.
     /// </summary>
     /// <returns>Returns a raml string of the model.</returns>
-    override this.ToString() = "a"
+    override this.ToString() = 
+        let hasVisitedRoutes = new Dictionary<string, bool>()
+
+        let SetRamlRoot (sb:StringBuilder) = 
+            let UriScheme = match this.BaseUri with | null -> "HTTP" | _ -> this.BaseUri.Scheme.ToUpper()
+            sb.Append("#%RAML 0.8" + Environment.NewLine) 
+              .Append("---" + Environment.NewLine)
+              .AppendFormat("title: {0}{1}", this.Title , Environment.NewLine)
+              .AppendFormat("baseUri: {0}{1}", this.BaseUri , Environment.NewLine)
+              .AppendFormat("protocols: [{0}]{1}", UriScheme , Environment.NewLine) |> ignore
+
+            match this.Version with 
+            | null -> () 
+            | _ -> sb.AppendFormat("version: [{0}]{1}", this.Version , Environment.NewLine) |> ignore
+
+            match this.DefaultMediaType with 
+            | null -> () 
+            | _ -> sb.AppendFormat("mediaType: [{0}]{1}", this.DefaultMediaType , Environment.NewLine) |> ignore
+
+            match this.Description with 
+            | null -> sb 
+            | _ -> sb.AppendFormat("documentation: {0}", Environment.NewLine)
+                     .AppendFormat("  - title: The Description of the API{0}", Environment.NewLine)
+                     .AppendFormat("    content: |{0}", Environment.NewLine)
+                     .AppendFormat("      {0}{1}", this.Description , Environment.NewLine) 
+                   
+        let setHttpVerb (sb:StringBuilder, route:RouteModel) = 
+            sb.AppendFormat("  {0}:{1}", route.Verb, Environment.NewLine) |> ignore
+
+        let setDescription (sb:StringBuilder, route:RouteModel) = 
+            sb.AppendFormat("    description: {0}{1}", route.Description, Environment.NewLine) |> ignore
+
+        let setRequest (sb:StringBuilder, route:RouteModel) = 
+            match route.BodyParameters = null || route.BodyParameters.Count = 0 with
+            | true -> ()
+            |false -> sb.AppendFormat("    body:{0}", Environment.NewLine)
+                        .AppendFormat("      {0}: {1}", route.RequestContentType,  Environment.NewLine)
+                        .AppendFormat("        formParameters: {0}", Environment.NewLine) |> ignore
+                      route.BodyParameters
+                      |> Seq.iter( fun r -> 
+                                    sb.AppendFormat("          {0}: {1}", r.Name, Environment.NewLine)
+                                      .AppendFormat("            description  : {0}{1}", r.Description, Environment.NewLine)
+                                      .AppendFormat("            type  : {0}{1}", r.Type.ToRamlType(), Environment.NewLine)
+                                      .AppendFormat("            required  : {0}{1}", r.IsRequired.ToString().ToLower(), Environment.NewLine)
+                                      .AppendFormat("            example  : {0}{1}", r.Example, Environment.NewLine) |> ignore
+                                 )
+
+        let setHeaders (sb:StringBuilder, route:RouteModel) = 
+            match route.Headers = null || route.Headers.Count <= 0 || route.Headers.All(fun p -> String.IsNullOrEmpty(p.Name)) with
+            |  true -> ()
+            | false -> sb.AppendFormat("    headers:{0}", Environment.NewLine) |> ignore
+                       route.Headers
+                       |> Seq.iter (fun header -> 
+                                        sb.AppendFormat("      {0}: {1}", header.Name, Environment.NewLine)
+                                          .AppendFormat("        displayName: {0}{1}", header.Name, Environment.NewLine) |> ignore
+                                        match not(String.IsNullOrEmpty(header.Example)) with 
+                                        | true -> sb.AppendFormat("        example: {0}{1}", header.Example, Environment.NewLine) |> ignore 
+                                        | false -> ()
+                                        match not(header.Type = null) with 
+                                        | true -> sb.AppendFormat("        type: {0}{1}", header.Type.ToRamlType(), Environment.NewLine) |> ignore
+                                        | false -> ()
+
+                                        match not(header.Type.ToRamlType() <> "number" && header.Type.ToRamlType() <> "integer") with 
+                                        | true -> sb.AppendFormat("        minimum: {0}{1}", header.Minimum, Environment.NewLine)
+                                                    .AppendFormat("        maximum: {0}{1}", header.Maximum, Environment.NewLine) |> ignore
+                                        | false -> ()
+
+                                        match not(String.IsNullOrEmpty(header.Description)) with 
+                                        | true -> sb.AppendFormat("        description: {0}{1}", header.Description, Environment.NewLine) |> ignore
+                                        | false -> ()
+                                    )
+
+        let setParameters (sb:StringBuilder, route:RouteModel) = 
+            match route.QueryParameters = null || route.QueryParameters.Count = 0 with
+            | true  -> ()
+            | false -> sb.AppendFormat("    queryParameters: {0}", Environment.NewLine) |> ignore
+                       route.QueryParameters
+                       |> Seq.iter(fun parameters -> 
+                                        sb.AppendFormat("        {0}: {1}", parameters.Name, Environment.NewLine)
+                                          .AppendFormat("          type: {0}{1}", parameters.Type.ToRamlType(), Environment.NewLine )
+                                          .AppendFormat("          required: {0}{1}", parameters.IsRequired.ToString().ToLower(), Environment.NewLine )
+                                          .AppendFormat("          description: {0}{1}", parameters.Description, Environment.NewLine )
+                                          .AppendFormat("          example: |{1}            {0}{1}", parameters.Example, Environment.NewLine ) |> ignore)
+
+        let setResponses (sb:StringBuilder, route:RouteModel) = 
+            match route.Responses = null || 
+                route.Responses.Count <= 0 ||
+                route.Responses.All(fun p -> String.IsNullOrEmpty(p.ContentType)) with
+            | true  -> ()
+            | false -> sb.AppendFormat("    responses:{0}", Environment.NewLine) |> ignore
+                       route.Responses
+                       |> Seq.iter(fun response ->
+                                        sb.AppendFormat("      {0}:{1}", (int)response.StatusCode, Environment.NewLine) |> ignore
+                                        match not(String.IsNullOrEmpty(response.Description)) with 
+                                        | true -> sb.AppendFormat("        description: |{1}          {0}{1}", response.Description, Environment.NewLine) |> ignore
+                                        | false -> ()
+                                        sb.AppendFormat("        body:{0}", Environment.NewLine)
+                                          .AppendFormat("          {0}: {1}", response.ContentType, Environment.NewLine)
+                                          .AppendFormat("            schema: {0}{1}", response.Schema, Environment.NewLine)|> ignore
+                                        match not(String.IsNullOrEmpty(response.Example)) with 
+                                        | true -> sb.AppendFormat("            example: |{1}                {0}{1}", response.Example, Environment.NewLine) |> ignore
+                                        | false -> ()
+                                    )
+
+        let setUriParameters (sb:StringBuilder, route:RouteModel) = 
+            match route.UriParameters = null || route.UriParameters.Count <= 0 with 
+            | true -> ()
+            |false -> sb.AppendFormat("  uriParameters: {0}", Environment.NewLine) |> ignore
+                      route.UriParameters
+                      |> Seq.iter( fun parameters -> 
+                                        sb.AppendFormat("      {0}: {1}", parameters.Name, Environment.NewLine)
+                                          .AppendFormat("        type: {0}{1}", parameters.Type.ToRamlType(), Environment.NewLine)
+                                          .AppendFormat("        required: {0}{1}", parameters.IsRequired.ToString().ToLower(), Environment.NewLine)
+                                          .AppendFormat("        description: {0}{1}", parameters.Description, Environment.NewLine)
+                                          .AppendFormat("        example: |{1}            {0}{1}", parameters.Example, Environment.NewLine) |> ignore)
+
+        let setRoutes (sb:StringBuilder, route:RouteModel) =
+            match not(hasVisitedRoutes.ContainsKey(route.UrlTemplate)) || not(hasVisitedRoutes.[route.UrlTemplate]) with
+            | true  -> setUriParameters(sb, route)
+                       hasVisitedRoutes.Add(route.UrlTemplate, true)
+                       ()
+            | false -> setHttpVerb(sb, route)
+                       setDescription(sb, route)
+                       setRequest(sb, route)
+                       setHeaders(sb, route)
+                       setParameters(sb, route)
+                       setResponses(sb, route)
+                       ()
+
+        let setResources (resource, verb, sb:StringBuilder) = 
+            sb.Append("/") |> ignore
+            sb.Append(resource.ToString()) |> ignore
+            sb.AppendLine(":") |> ignore
+            hasVisitedRoutes.Clear()
+            verb
+            |> Seq.iter (fun x -> setRoutes (sb, x) )
+            ()
+        
+
+        let SetRamlBody (sb:StringBuilder) = 
+            match this.Routes = null || this.Routes.Count = 0 with
+            | true  -> sb
+            | false -> (this.Routes
+                        |> Seq.sortBy( fun p -> p.UrlTemplate )
+                        |> Seq.groupBy( fun p -> p.UrlTemplate)
+                        |> Seq.map( fun (key, item) ->  setResources(key, item, sb))
+                        |> ignore
+
+                        sb)
+
+        let sb = new StringBuilder()
+        (sb
+         |> SetRamlRoot
+         |> SetRamlBody).ToString()
+
