@@ -30,24 +30,11 @@ namespace RAMLSharp.Test
             mockActionDescriptor = new Mock<HttpActionDescriptor>();
             mockRoute = new Mock<IHttpRoute>();
             mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
-
-            expectedModel = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1",
-                Routes = new List<RouteModel>
-                { 
-                    new RouteModel
-                    { 
-                        UrlTemplate="api/test", 
-                        Verb="get",
-                        Responses= null
-                    } 
-                }
+            var routes = new List<RouteModel>
+            { 
+                new RouteModel("api/test", "get", null, null, null, null, null, null, null)
             };
+            expectedModel = new RAMLModel("test", new Uri("http://www.test.com"), "1", "application/json", "test", routes);
 
             descriptions = new List<ApiDescription>()
             {
@@ -62,18 +49,8 @@ namespace RAMLSharp.Test
 
             expectedResponseBody = new List<ResponseModel>
             {
-                new ResponseModel {
-                      ContentType="application/json",
-                      Description="This is a json response.",
-                      Example="{ 'value':'Hello World' }",
-                      StatusCode= System.Net.HttpStatusCode.OK
-                },
-                new ResponseModel {
-                      ContentType="application/xml",
-                      Description="This is an error response in xml.",
-                      Example="<error><message>opps</message></error>",
-                      StatusCode= System.Net.HttpStatusCode.BadRequest
-                }
+                new ResponseModel(System.Net.HttpStatusCode.OK, "application/json", "{ 'value':'Hello World' }", "This is a json response.", null),
+                new ResponseModel(System.Net.HttpStatusCode.BadRequest, "application/xml", "<error><message>opps</message></error>", "This is an error response in xml.", null)
             };
 
             expectedResponseBodyAttributes = new Collection<ResponseBodyAttribute>(

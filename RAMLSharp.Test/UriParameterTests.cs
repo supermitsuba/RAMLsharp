@@ -31,23 +31,11 @@ namespace RAMLSharp.Test
             mockRoute = new Mock<IHttpRoute>();
             mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
 
-            expectedModel = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1",
-                Routes = new List<RouteModel>
-                { 
-                    new RouteModel
-                    { 
-                        UrlTemplate="api/test", 
-                        Verb="get",
-                        Responses= null
-                    } 
-                }
+            var routes = new List<RouteModel>
+            { 
+                new RouteModel("api/test", "get", null, null, null, null, null, null, null)
             };
+            expectedModel = new RAMLModel("test", new Uri("http://www.test.com"), "1", "application/json", "test", routes);
 
             sampleApiParameterDescription = new ApiParameterDescription()
             {

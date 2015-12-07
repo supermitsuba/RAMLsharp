@@ -86,13 +86,13 @@
     <Compile Include="UriParameterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RamlSharp\RamlSharp.csproj">
-      <Project>{f819c106-0d09-4624-81c5-ecdd39b4c1bf}</Project>
-      <Name>RamlSharp</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\RamlSharp.FSharp\RamlSharp.FSharp.fsproj">
+      <Project>{deb293e8-d693-4465-b7ef-cb6bf0679ce3}</Project>
+      <Name>RamlSharp.FSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

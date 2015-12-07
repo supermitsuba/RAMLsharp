@@ -31,23 +31,11 @@ namespace RAMLSharp.Test
             mockRoute = new Mock<IHttpRoute>();
             mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
 
-            expectedModel = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1",
-                Routes = new List<RouteModel>
-                { 
-                    new RouteModel
-                    { 
-                        UrlTemplate="api/test", 
-                        Verb="get",
-                        Headers = null
-                    } 
-                }
+            var routes = new List<RouteModel>
+            { 
+                new RouteModel("api/test", "get", null, null, null, null, null, null, null)
             };
+            expectedModel = new RAMLModel("test", new Uri("http://www.test.com"), "1", "application/json", "test", routes);
 
             descriptions = new List<ApiDescription>()
             {
@@ -62,20 +50,8 @@ namespace RAMLSharp.Test
 
             expectedHeader = new List<RequestHeaderModel>
             {
-                new RequestHeaderModel {
-                    Name = "Accept",
-                    Description = "Used to tell the server what format it will accept.",
-                    Example = "application/json",
-                    IsRequired = false,
-                    Type = typeof(string)
-                },
-                new RequestHeaderModel {
-                    Name = "Date",
-                    Description = "Used to tell the server when the request was made.",
-                    Example = "application/json",
-                    IsRequired = false,
-                    Type = typeof(DateTime)
-                }
+                new RequestHeaderModel("Accept", "Used to tell the server what format it will accept.", typeof(string), false, "application/json", 0, 0),
+                new RequestHeaderModel("Date", "Used to tell the server when the request was made.", typeof(DateTime), false, "application/json", 0, 0)
             };
 
             expectedHeaderAttributes = new Collection<RequestHeadersAttribute>(

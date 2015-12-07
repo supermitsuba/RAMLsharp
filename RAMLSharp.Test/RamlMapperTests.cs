@@ -19,15 +19,9 @@ namespace RAMLSharp.Test
         [TestInitialize]
         public void TestInitialize()
         {
-            expectedModel = new RAMLModel
-            {
-                BaseUri = new Uri("http://www.test.com"),
-                DefaultMediaType = "application/json",
-                Description = "test",
-                Title = "test",
-                Version = "1",
-                Routes = new List<RouteModel>()
-            };
+            var routes = new List<RouteModel>();
+            expectedModel = new RAMLModel("test", new Uri("http://www.test.com"), "1", "application/json", "test", routes);
+            
             mockRoute = new Mock<IHttpRoute>();
             mockRoute.Setup(p => p.RouteTemplate).Returns("api/test");
         }
@@ -196,11 +190,7 @@ namespace RAMLSharp.Test
         {
             expectedModel.Routes = new List<RouteModel>
             { 
-                new RouteModel
-                { 
-                    UrlTemplate="api/test", 
-                    Verb="get" 
-                } 
+                new RouteModel("api/test", "get", null, null, null, null, null, null, null)
             };
             
             IEnumerable<ApiDescription> model = new List<ApiDescription>()
