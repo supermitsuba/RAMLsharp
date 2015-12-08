@@ -243,18 +243,14 @@ namespace RAMLSharp.Models
             foreach (var response in route.Responses)
             {
                 RAML.AppendFormat("      {0}:{1}", (int)response.StatusCode, _newLine);
-                if (!String.IsNullOrEmpty(response.Description))
-                {
+                if (!string.IsNullOrEmpty(response.Description))
                     RAML.AppendFormat("        description: |{1}          {0}{1}", response.Description, _newLine);
-                }
                 RAML.AppendFormat("        body:{0}", _newLine);
                 RAML.AppendFormat("          {0}: {1}", response.ContentType, _newLine);
                 if (!string.IsNullOrWhiteSpace(response.Schema))
                   RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
-                if (!String.IsNullOrEmpty(response.Example))
-                {
-                    RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example, _newLine);
-                }
+                if (!string.IsNullOrEmpty(response.Example))
+                  RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example.Replace("\n", "                "), _newLine);
             }
             return RAML;
         }
