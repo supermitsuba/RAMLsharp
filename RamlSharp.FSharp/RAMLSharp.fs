@@ -12,7 +12,9 @@ open RAMLSharp.Extensions
 
 type RAMLMapper (description : IEnumerable<ApiDescription>) =
     let mutable _apiDescriptions = description
-
+    do
+        if _apiDescriptions = null then _apiDescriptions <- new List<ApiDescription>()
+    
     /// <summary>
     /// This constructor is the main constructor to pass in your controller and find out about your Web API.
     /// </summary>

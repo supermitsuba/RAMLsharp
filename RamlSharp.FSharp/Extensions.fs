@@ -43,12 +43,12 @@ type TypeExtension =
             | TypeCode.DateTime -> false
             | _                 -> true
 
-        match typeValue.IsGenericType && typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>> with
+        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>>) with
         | true  -> checkType(Nullable.GetUnderlyingType(typeValue))
         | false -> checkType(typeValue)
 
     [<Extension()>] 
     static member GetForRealType(typeValue:Type) = 
-        match typeValue.IsGenericType && typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>> with
+        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>>) with
         | true  -> Nullable.GetUnderlyingType(typeValue)
         | false -> typeValue
