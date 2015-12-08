@@ -248,7 +248,8 @@ namespace RAMLSharp.Models
                 RAML.AppendFormat("        body:{0}", _newLine);
                 RAML.AppendFormat("          {0}: {1}", response.ContentType, _newLine);
                 if (!string.IsNullOrWhiteSpace(response.Schema))
-                  RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
+                  //RAML.AppendFormat("            schema: {0}{1}", response.Schema, _newLine);
+                  RAML.AppendFormat("            schema: |{1}                {0}{1}", response.Schema.Replace("\n", "                "), _newLine);
                 if (!string.IsNullOrEmpty(response.Example))
                   RAML.AppendFormat("            example: |{1}                {0}{1}", response.Example.Replace("\n", "                "), _newLine);
             }

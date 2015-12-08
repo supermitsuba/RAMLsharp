@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json.Schema;
 
@@ -41,7 +42,7 @@ namespace RAMLSharp.Attributes
           set
           {
             var j = new JsonSchemaGenerator();
-            Example = j.Generate(value).ToString();
+            Schema = j.Generate(value).ToString();
             _responseType = value;
           }
         }
