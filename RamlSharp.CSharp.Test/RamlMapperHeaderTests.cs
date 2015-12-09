@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
 using RAMLSharp.Attributes;
 using RAMLSharp.Models;
 using System;
@@ -10,10 +9,11 @@ using System.Linq;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Web.Http.Routing;
+using NUnit.Framework;
 
 namespace RAMLSharp.Test
 {
-    [TestClass]
+	[TestFixture]
     [ExcludeFromCodeCoverage]
     public class RamlMapperHeaderTests
     {
@@ -24,7 +24,7 @@ namespace RAMLSharp.Test
         Collection<RequestHeadersAttribute> expectedHeaderAttributes = null;
         Mock<IHttpRoute> mockRoute = null;
         
-        [TestInitialize]
+		[SetUp]
         public void TestInitialize()
         {
             mockActionDescriptor = new Mock<HttpActionDescriptor>();
@@ -67,7 +67,7 @@ namespace RAMLSharp.Test
                 ).ToList());
         }
 
-        [TestMethod]
+		[Test]
         public void RamlMapper_CreateOneApiWithOneHeader_Display1Headers()
         {
             expectedModel.Routes[0].Headers = new List<RequestHeaderModel>
@@ -89,7 +89,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("Accept:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithNullHeader_DoNotDisplayHeadersSection()
         {
             expectedModel.Routes[0].Headers = null;
@@ -104,7 +104,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("headers:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithMultipleHeaders_Display2Headers()
         {
             expectedModel.Routes[0].Headers = expectedHeader;
@@ -121,7 +121,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("Date:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithNullName_DoNotDisplayHeaderSection()
         {
             expectedHeader[0].Name = null;
@@ -146,7 +146,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("headers:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithTwoNullName_DoNotDisplayHeaderSection()
         {
             expectedHeader[0].Name = null;
@@ -166,7 +166,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("headers:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithNullDescription_DoNotDisplayDescriptionField()
         {
             expectedHeader[0].Description = null;
@@ -193,7 +193,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("        description:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithNullExample_DoNotDisplayExampleField()
         {
             expectedHeader[0].Example = null;
@@ -220,7 +220,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("        example:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneApiWithNullType_DoNotDisplayTypeField()
         {
             expectedHeader[0].Type = null;

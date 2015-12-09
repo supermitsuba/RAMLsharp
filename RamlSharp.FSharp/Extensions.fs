@@ -40,15 +40,16 @@ type TypeExtension =
             | TypeCode.Double
             | TypeCode.Single   
             | TypeCode.Boolean  
-            | TypeCode.DateTime -> false
+            | TypeCode.DateTime 
+            | TypeCode.String   -> false
             | _                 -> true
 
-        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>>) with
+        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typedefof<Nullable<_>>) with
         | true  -> checkType(Nullable.GetUnderlyingType(typeValue))
         | false -> checkType(typeValue)
 
     [<Extension()>] 
     static member GetForRealType(typeValue:Type) = 
-        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typeof<Nullable<_>>) with
+        match typeValue.IsGenericType && (typeValue.GetGenericTypeDefinition() = typedefof<Nullable<_>>) with
         | true  -> Nullable.GetUnderlyingType(typeValue)
         | false -> typeValue

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RAMLSharp.Attributes;
 using RAMLSharp.Models;
@@ -10,10 +9,11 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Http.Routing;
+using NUnit.Framework;
 
 namespace RAMLSharp.Test
 {
-    [TestClass]
+	[TestFixture]
     [ExcludeFromCodeCoverage]
     public class RamlMapperResponseBodyTests
     {
@@ -24,7 +24,7 @@ namespace RAMLSharp.Test
         Collection<ResponseBodyAttribute> expectedResponseBodyAttributes = null;
         Mock<IHttpRoute> mockRoute = null;
 
-        [TestInitialize]
+        [SetUp]
         public void TestInitialize()
         {
             mockActionDescriptor = new Mock<HttpActionDescriptor>();
@@ -65,7 +65,7 @@ namespace RAMLSharp.Test
                 ).ToList());
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateOneResponseBody_GenerateRAML()
         {
             expectedModel.Routes[0].Responses = new List<ResponseModel>
@@ -87,7 +87,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("          application/json:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateTwoResponseBody_GenerateRAML()
         {
             expectedModel.Routes[0].Responses = expectedResponseBody;
@@ -103,7 +103,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateNullResponseBody_GenerateRAML()
         {
             expectedResponseBodyAttributes = null;
@@ -119,7 +119,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateEmptyResponseBody_GenerateRAML()
         {
             expectedResponseBody = new List<ResponseModel>();
@@ -137,7 +137,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateNullContentType_GenerateRAMLWithoutResponse()
         {
             expectedResponseBody[0].ContentType = null;
@@ -158,7 +158,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("          application/xml:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateNullExample_GenerateRAMLWithoutExample()
         {
             expectedResponseBody[0].Example = null;
@@ -179,7 +179,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("            example:"));
         }
         
-        [TestMethod]
+        [Test]
         public void RamlMapper_CreateNullDescription_GenerateRAMLWithoutDescription()
         {
             expectedResponseBody[0].Example = null;

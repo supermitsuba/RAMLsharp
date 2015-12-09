@@ -35,18 +35,20 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
         let ramlModel = new RAMLModel(title ,baseUri, version, defaultMediaTypes, description, new List<RouteModel>())
 
         let GetHeaders (api:ApiDescription) = 
-            let headerAttributes = api.ActionDescriptor.GetCustomAttributes<RequestHeadersAttribute>()
-            match headerAttributes with
+            match api.ActionDescriptor with
             | null -> new List<RequestHeaderModel>()
-            | x    -> x.Select( fun h -> 
-                                    new RequestHeaderModel(h.Name, 
-                                                           h.Description, 
-                                                           h.Type, 
-                                                           h.IsRequired, 
-                                                           h.Example, 
-                                                           h.Minimum, 
-                                                           h.Maximum)).ToList()
-        
+            | _    ->   let headerAttributes = api.ActionDescriptor.GetCustomAttributes<RequestHeadersAttribute>()
+                        match headerAttributes with
+                        | null -> new List<RequestHeaderModel>()
+                        | x    -> x.Select( fun h -> 
+                                                new RequestHeaderModel(h.Name, 
+                                                                       h.Description, 
+                                                                       h.Type, 
+                                                                       h.IsRequired, 
+                                                                       h.Example, 
+                                                                       h.Minimum, 
+                                                                       h.Maximum)).ToList()
+                    
         let GetQueryParameters(api:ApiDescription) = 
 
             let mapParameters (props:System.Reflection.PropertyInfo[], isOptional, documentation, example) =
@@ -118,15 +120,17 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
                 .ToList()
 
         let GetResponseBodies (api:ApiDescription) = 
-            let headerAttributes = api.ActionDescriptor.GetCustomAttributes<ResponseBodyAttribute>()
-            match headerAttributes with
+            match api.ActionDescriptor with
             | null -> new List<ResponseModel>()
-            | x    -> x.Select( fun h -> 
-                                    new ResponseModel(h.StatusCode, 
-                                                      h.ContentType, 
-                                                      (match (File.Exists(h.Example)) with | true -> File.ReadAllText(h.Example) | false -> h.Example), 
-                                                      h.Description, 
-                                                      h.Schema)).ToList()               
+            | _ ->  let headerAttributes = api.ActionDescriptor.GetCustomAttributes<ResponseBodyAttribute>()
+                    match headerAttributes with
+                    | null -> new List<ResponseModel>()
+                    | x    -> x.Select( fun h -> 
+                                            new ResponseModel(h.StatusCode, 
+                                                              h.ContentType, 
+                                                              (match (File.Exists(h.Example)) with | true -> File.ReadAllText(h.Example) | false -> h.Example), 
+                                                              h.Description, 
+                                                              h.Schema)).ToList()               
         let mapApi (api:ApiDescription) = 
             let requestedContentType = match api.HttpMethod.Method.ToLower() with
                                        | "put"

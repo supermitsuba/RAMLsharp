@@ -324,6 +324,7 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
             | true  -> ()
             | false -> sb.AppendFormat("    responses:{0}", Environment.NewLine) |> ignore
                        route.Responses
+                       |> Seq.sortBy(fun x -> x.StatusCode)
                        |> Seq.iter(fun response ->
                                         sb.AppendFormat("      {0}:{1}", (int)response.StatusCode, Environment.NewLine) |> ignore
                                         match not(String.IsNullOrEmpty(response.Description)) with 

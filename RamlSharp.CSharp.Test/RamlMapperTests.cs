@@ -1,22 +1,22 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
 using RAMLSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Http.Description;
 using System.Web.Http.Routing;
+using NUnit.Framework;
 
 namespace RAMLSharp.Test
 {
-    [TestClass]
+	[TestFixture]
     [ExcludeFromCodeCoverage]
     public class RamlMapperTests
     {
         RAMLModel expectedModel = null;
         Mock<IHttpRoute> mockRoute = null;
 
-        [TestInitialize]
+        [SetUp]
         public void TestInitialize()
         {
             var routes = new List<RouteModel>();
@@ -27,7 +27,7 @@ namespace RAMLSharp.Test
         }
 
         #region null checks for base information
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullAPIs_DisplayBasicRAMLDocument()
         {
             IEnumerable<ApiDescription> modelApiDescription = null;
@@ -38,7 +38,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNoAPIs_DisplayBasicRAMLDocument()
         {
             expectedModel.Routes = null;
@@ -50,7 +50,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullUri_DisplayBasicRAMLDocumentWithoutURI()
         {
             expectedModel.BaseUri = null;
@@ -62,7 +62,7 @@ namespace RAMLSharp.Test
             Assert.AreEqual(expectedModel.ToString(), result.ToString(), "The RAML string must be the same.");
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullTitle_DisplayBasicRAMLDocumentWithBlankTitle()
         {
             expectedModel.Title = null;
@@ -75,7 +75,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("title:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullDescription_DisplayBasicRAMLDocumentWithoutDescription()
         {
             expectedModel.Description = null;
@@ -88,7 +88,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("content:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullVersion_DisplayBasicRAMLDocumentWithoutVersion()
         {
             expectedModel.Version = null;
@@ -101,7 +101,7 @@ namespace RAMLSharp.Test
             Assert.IsFalse(result.ToString().Contains("version:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithNullBaseMediaType_DisplayBasicRAMLDocumentWithoutMediaType()
         {
             expectedModel.DefaultMediaType = null;
@@ -117,7 +117,7 @@ namespace RAMLSharp.Test
         #endregion
 
         #region check for fields in base information
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithVersion_GenerateRAMLWithVersion()
         {
             IEnumerable<ApiDescription> model = null;
@@ -128,7 +128,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("version:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithBaseMediaType_GenerateRAMLWithMediaType()
         {
             IEnumerable<ApiDescription> model = null;
@@ -139,7 +139,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("mediaType:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithDescription_GenerateRAMLWithDescription()
         {
             IEnumerable<ApiDescription> model = null;
@@ -150,7 +150,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("content:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithTitle_GenerateRAMLWithTitle()
         {
             IEnumerable<ApiDescription> model = null;
@@ -161,7 +161,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("title:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithUri_GenerateRAMLWithBaseURI()
         {
             IEnumerable<ApiDescription> model = null;
@@ -172,7 +172,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("baseUri:"));
         }
 
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithProtocol_GenerateRAMLWithProtocol()
         {
             IEnumerable<ApiDescription> model = null;
@@ -185,7 +185,7 @@ namespace RAMLSharp.Test
         #endregion
 
         #region ApiDescription Tests
-        [TestMethod]
+        [Test]
         public void RAMLSharp_CreateRamlDocumentWithOneApi_GenerateRAMLWithOneAPI()
         {
             expectedModel.Routes = new List<RouteModel>

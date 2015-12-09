@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RAMLSharp.Models;
 using System.Collections.Generic;
 using Moq;
@@ -10,11 +9,12 @@ using System.Collections.ObjectModel;
 using RAMLSharp.Test.Fakes;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Http.Routing;
+using NUnit.Framework;
 
 namespace RAMLSharp.Test
 {
     [ExcludeFromCodeCoverage]
-    [TestClass]
+	[TestFixture]
     public class UriParameterTests
     {
         RAMLModel expectedModel = null;
@@ -24,7 +24,7 @@ namespace RAMLSharp.Test
         Mock<HttpParameterDescriptor> mockHttpParameterDescriptor = null;
         Mock<IHttpRoute> mockRoute = null;
 
-        [TestInitialize]
+        [SetUp]
         public void TestInitialize()
         {
             mockHttpParameterDescriptor = new Mock<HttpParameterDescriptor>();
@@ -45,7 +45,7 @@ namespace RAMLSharp.Test
             };
         }
 
-        [TestMethod]
+        [Test]
         public void UriParameters_ComplexObject_ReturnsAllPublicProperties()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
@@ -81,7 +81,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("        type: date"));
         }
 
-        [TestMethod]
+        [Test]
         public void UriParameters_Primitive_ReturnsThatProperty()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
@@ -113,7 +113,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("        type: string"));
         }
 
-        [TestMethod]
+        [Test]
         public void UriParameters_InheritedProperties_ReturnsThatProperty()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
@@ -150,7 +150,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(result.ToString().Contains("        type: date"));
         }
 
-        [TestMethod]
+        [Test]
         public void UriParameters_NestedObject_ReturnsFirstLevelProperties()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
@@ -187,7 +187,7 @@ namespace RAMLSharp.Test
             Assert.IsTrue(!result.ToString().Contains("        type: date"));
         }
 
-        [TestMethod]
+        [Test]
         public void UriParameters_ParameterDescriptor_IfPropertyIsNullThenSkip()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
@@ -212,7 +212,7 @@ namespace RAMLSharp.Test
         }
 
 
-        [TestMethod]
+        [Test]
         public void UriParameters_ParameterDescriptor_IfTypeIsNullThenSkip()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()
