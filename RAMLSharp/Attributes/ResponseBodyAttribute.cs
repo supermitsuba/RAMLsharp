@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using Newtonsoft.Json.Schema;
 
 namespace RAMLSharp.Attributes
 {
@@ -9,6 +11,8 @@ namespace RAMLSharp.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class ResponseBodyAttribute : Attribute
     {
+        private Type _responseType;
+
         /// <summary>
         /// This is the status code of the response.  Ex: 200, 400, 500, etc.
         /// </summary>
@@ -29,5 +33,18 @@ namespace RAMLSharp.Attributes
         /// This is the schema of the payload returned.
         /// </summary>
         public string Schema { get; set; }
+        /// <summary>
+        /// This is an Type of the payload.
+        /// </summary>
+        public Type ResponseType
+        {
+          get { return _responseType; }
+          set
+          {
+            var j = new JsonSchemaGenerator();
+            Schema = j.Generate(value).ToString();
+            _responseType = value;
+          }
+        }
     }
 }
