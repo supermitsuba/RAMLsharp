@@ -7,33 +7,39 @@
         <member name="T:RAMLSharp.Sample.Controllers.DerpController">
             <summary>
             my derp
-            </summary></member>
+            </summary>
+        </member>
         <member name="M:RAMLSharp.Sample.Controllers.DerpController.Get">
             <summary>
             deeee
             </summary>
-            <returns>rrrp</returns></member>
+            <returns>rrrp</returns>
+        </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Get">
             <summary>
             This gets the tests
             </summary>
             <example>Example of get</example>
-            <returns>Returns a list of values!</returns></member>
+            <returns>Returns a list of values!</returns>
+        </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Post(System.String)">
             <summary>
             This inserts a test
             </summary>
-            <param name="testCase">The test</param></member>
+            <param name="testCase">The test</param>
+        </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Put(System.Int32,System.String)">
             <summary>
             updates the test
             </summary>
             <param name="id">id of the test</param>
-            <param name="testCase">The test</param></member>
+            <param name="testCase">The test</param>
+        </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Delete(System.Int32)">
             <summary>
             Delete a test
             </summary>
-            <param name="id">With this id</param></member>
+            <param name="id">With this id</param>
+        </member>
     </members>
 </doc>
