@@ -48,7 +48,6 @@
     <Compile Include="RAMLSharpTest.ConstructorInformation.fs" />
     <Compile Include="RAMLSharpTest.GenerateAPIDocumentation.fs" />
     <Compile Include="RAMLSharpTest.Extensions.fs" />
-    <Compile Include="Models_Tests.fs" />
     <Compile Include="RAMLSharpTest.URIParameters.fs" />
   </ItemGroup>
   <ItemGroup>
