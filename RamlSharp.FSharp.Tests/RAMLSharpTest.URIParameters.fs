@@ -138,13 +138,13 @@ let ``For UriParameters, Nested Object returns first level properties`` () =
     let subject = new RAMLMapper(descriptions);
     let result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
 
-    Assert.IsTrue(result.ToString().Contains("      Field1:"));
-    Assert.IsTrue(result.ToString().Contains("      Field2:"));
-    Assert.IsTrue(result.ToString().Contains("      Field3:"));
     Assert.IsTrue(result.ToString().Contains("      Field5:"));
-    Assert.IsTrue(result.ToString().Contains("        type: integer"));
-    Assert.IsTrue(result.ToString().Contains("        type: string"));
-    Assert.IsTrue(result.ToString().Contains("        type: date"));
+    Assert.IsTrue(not(result.ToString().Contains("      Field1:")))
+    Assert.IsTrue(not(result.ToString().Contains("      Field2:")))
+    Assert.IsTrue(not(result.ToString().Contains("      Field3:")))
+    Assert.IsTrue(not(result.ToString().Contains("        type: integer")))
+    Assert.IsTrue(result.ToString().Contains("        type: string"))
+    Assert.IsTrue(not(result.ToString().Contains("        type: date")))
 
 [<Test>]
 [<ExcludeFromCodeCoverage>]
