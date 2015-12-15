@@ -58,8 +58,6 @@
     <Compile Include="Fakes\FakeNestedComplex.cs" />
     <Compile Include="RamlMapperHeaderTests.cs" />
     <Compile Include="RamlMapperResponseBodyTests.cs" />
-    <Compile Include="RamlMapperTests.cs" />
-    <Compile Include="TypeExtensionsTest.cs" />
     <Compile Include="UriParameterTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

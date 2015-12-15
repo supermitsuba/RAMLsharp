@@ -46,42 +46,6 @@ namespace RAMLSharp.Test
         }
 
         [Test]
-        public void UriParameters_ComplexObject_ReturnsAllPublicProperties()
-        {
-            var parameterDescriptions = new Collection<ApiParameterDescription>()
-            {
-                sampleApiParameterDescription
-            };
-            sampleDescription = new FakeApiDescription(parameterDescriptions)
-            {
-                HttpMethod = new System.Net.Http.HttpMethod("get"),
-                RelativePath = "api/test",
-                Route = mockRoute.Object
-            };
-
-            mockHttpParameterDescriptor.Setup(p => p.IsOptional)
-                                       .Returns(true);
-            mockHttpParameterDescriptor.Setup(p => p.DefaultValue)
-                                       .Returns(null);
-            mockHttpParameterDescriptor.Setup(p => p.ParameterType)
-                                       .Returns(typeof(FakeComplex));
-
-            sampleApiParameterDescription.ParameterDescriptor = mockHttpParameterDescriptor.Object;
-
-            descriptions = new List<ApiDescription>() { sampleDescription };
-
-            var subject = new RAMLMapper(descriptions);
-            var result = subject.WebApiToRamlModel(new Uri("http://www.test.com"), "test", "1", "application/json", "test");
-
-            Assert.IsTrue(result.ToString().Contains("      field1:"));
-            Assert.IsTrue(result.ToString().Contains("      field2:"));
-            Assert.IsTrue(result.ToString().Contains("      field3:"));
-            Assert.IsTrue(result.ToString().Contains("        type: integer"));
-            Assert.IsTrue(result.ToString().Contains("        type: string"));
-            Assert.IsTrue(result.ToString().Contains("        type: date"));
-        }
-
-        [Test]
         public void UriParameters_Primitive_ReturnsThatProperty()
         {
             var parameterDescriptions = new Collection<ApiParameterDescription>()

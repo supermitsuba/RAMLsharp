@@ -43,11 +43,19 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="App.config" />
+    <Compile Include="Fakes.fs" />
     <Compile Include="RAMLSharpTest.NullObjects.fs" />
-    <Compile Include="Models_Tests.fs" />
+    <Compile Include="RAMLSharpTest.ConstructorInformation.fs" />
+    <Compile Include="RAMLSharpTest.GenerateAPIDocumentation.fs" />
     <Compile Include="RAMLSharpTest.Extensions.fs" />
+    <Compile Include="Models_Tests.fs" />
+    <Compile Include="RAMLSharpTest.URIParameters.fs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
