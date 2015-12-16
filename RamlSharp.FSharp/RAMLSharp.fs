@@ -20,7 +20,7 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
     /// </summary>
     /// <param name="controller">The controller that is hosting your API.</param>
     new (controller : ApiController) = 
-        RAMLMapper(controller.Configuration.Services.GetApiExplorer().ApiDescriptions);
+        RAMLMapper(controller.Configuration.Services.GetApiExplorer().ApiDescriptions)
 
     /// <summary>
     /// This method takes a few more pieces not described in your API and adds them to the RAML output.

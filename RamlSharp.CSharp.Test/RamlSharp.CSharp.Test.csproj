@@ -56,7 +56,6 @@
     <Compile Include="Fakes\FakeComplex.cs" />
     <Compile Include="Fakes\FakeInheritedComplex.cs" />
     <Compile Include="Fakes\FakeNestedComplex.cs" />
-    <Compile Include="RamlMapperHeaderTests.cs" />
     <Compile Include="RamlMapperResponseBodyTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

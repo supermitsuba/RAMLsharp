@@ -14,6 +14,7 @@ open Moq
 
 open NUnit.Framework
 
+[<ExcludeFromCodeCoverage>]
 let init() = 
     let routes = new List<RouteModel>()
     routes.Add(new RouteModel("api/test", "get", null, null, null, null, null, null, null))

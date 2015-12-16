@@ -49,6 +49,7 @@
     <Compile Include="RAMLSharpTest.GenerateAPIDocumentation.fs" />
     <Compile Include="RAMLSharpTest.Extensions.fs" />
     <Compile Include="RAMLSharpTest.URIParameters.fs" />
+    <Compile Include="RAMLSharpTest.Headers.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Moq">
