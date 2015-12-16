@@ -137,6 +137,12 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RamlSharp\RamlSharp.fsproj">
+      <Project>{deb293e8-d693-4465-b7ef-cb6bf0679ce3}</Project>
+      <Name>RamlSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -177,10 +183,4 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
-  <ItemGroup>
-    <ProjectReference Include="..\RamlSharp.FSharp\RamlSharp.FSharp.fsproj">
-      <Project>{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}</Project>
-      <Name>RamlSharp.FSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

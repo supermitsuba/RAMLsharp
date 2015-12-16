@@ -12,15 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7DB0CF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RamlSharp.Sample", "RamlSharp.Sample\RamlSharp.Sample.csproj", "{F93BE84A-CFD4-45D2-B75C-B99C8E5A10EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RamlSharp", "RamlSharp\RamlSharp.csproj", "{F819C106-0D09-4624-81C5-ECDD39B4C1BF}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RamlSharp", "RamlSharp\RamlSharp.fsproj", "{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RamlSharp.Test", "RamlSharp.Test\RamlSharp.Test.csproj", "{B927ED1B-62F0-4743-B117-641B330B7EAC}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RamlSharp.FSharp", "RamlSharp.FSharp\RamlSharp.FSharp.fsproj", "{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RamlSharp.FSharp.Tests", "RamlSharp.FSharp.Tests\RamlSharp.FSharp.Tests.fsproj", "{39405F35-39A7-40A5-9364-268FC79195A7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RamlSharp.CSharp.Test", "RamlSharp.CSharp.Test\RamlSharp.CSharp.Test.csproj", "{0BEA3DFB-3FC3-4BC8-81B4-E41FD76D7058}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RamlSharp.Tests", "RamlSharp.Tests\RamlSharp.Tests.fsproj", "{39405F35-39A7-40A5-9364-268FC79195A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,14 +26,6 @@ Global
 		{F93BE84A-CFD4-45D2-B75C-B99C8E5A10EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F93BE84A-CFD4-45D2-B75C-B99C8E5A10EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F93BE84A-CFD4-45D2-B75C-B99C8E5A10EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F819C106-0D09-4624-81C5-ECDD39B4C1BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F819C106-0D09-4624-81C5-ECDD39B4C1BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F819C106-0D09-4624-81C5-ECDD39B4C1BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F819C106-0D09-4624-81C5-ECDD39B4C1BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B927ED1B-62F0-4743-B117-641B330B7EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B927ED1B-62F0-4743-B117-641B330B7EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B927ED1B-62F0-4743-B117-641B330B7EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B927ED1B-62F0-4743-B117-641B330B7EAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEB293E8-D693-4465-B7EF-CB6BF0679CE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,10 +34,6 @@ Global
 		{39405F35-39A7-40A5-9364-268FC79195A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39405F35-39A7-40A5-9364-268FC79195A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39405F35-39A7-40A5-9364-268FC79195A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BEA3DFB-3FC3-4BC8-81B4-E41FD76D7058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BEA3DFB-3FC3-4BC8-81B4-E41FD76D7058}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BEA3DFB-3FC3-4BC8-81B4-E41FD76D7058}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BEA3DFB-3FC3-4BC8-81B4-E41FD76D7058}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
