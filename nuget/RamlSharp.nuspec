@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>RamlSharp</id>
-    <version>1.0.7.0</version>
+    <version>2.0.0.0-beta</version>
     <title>RAMLSharp</title>
     <authors>Jorden Lowe, Dominick Aleardi</authors>
     <owners>Quicken Loans</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Enables WebApi projects to generate their RAML specification.</summary>
     <description>Enables WebApi projects to generate their RAML specification.</description>
-    <releaseNotes>Added ResponseBody parameter parsing.</releaseNotes>
+    <releaseNotes>Converted assembly to F#.  Should be backwards compatible.</releaseNotes>
     <copyright>Copyright ©  2015</copyright>
     <tags>webapi raml help pages ramlsharp</tags>
     <dependencies>

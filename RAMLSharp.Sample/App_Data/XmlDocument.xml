@@ -22,12 +22,6 @@
             <example>Example of get</example>
             <returns>Returns a list of values!</returns>
         </member>
-        <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Raml">
-            <summary>
-            Gets Raml
-            </summary>
-            <returns>Returns a string of RAML</returns>
-        </member>
         <member name="M:RAMLSharp.Sample.Controllers.ValuesController.Post(System.String)">
             <summary>
             This inserts a test

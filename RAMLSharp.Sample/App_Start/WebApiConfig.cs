@@ -1,6 +1,6 @@
-﻿using RAMLSharp.Configuration;
-using System.Web;
+﻿using System.Web;
 using System.Web.Http;
+using RAMLSharp.Configuration;
 
 namespace RAMLSharp
 {
@@ -11,7 +11,8 @@ namespace RAMLSharp
             // Web API configuration and services
 
             // Web API routes public static void Register(HttpConfiguration config)
-            config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
+			var xml = new RAMLSharp.Configuration.XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml"));
+			config.SetDocumentationProvider(xml);
 
             config.MapHttpAttributeRoutes();
             /*
