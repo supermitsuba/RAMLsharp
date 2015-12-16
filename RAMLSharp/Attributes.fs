@@ -2,12 +2,13 @@
 
 open System
 open System.Net
+open Newtonsoft.Json.Schema
 
 /// <summary>
 /// This is used to describe headers that your Web API may be looking for.
 /// </summary>
 [<AttributeUsage(AttributeTargets.Method, AllowMultiple=true)>]
-type RequestHeadersAttribute (name: string option, description: string option, ``type``: Type option, isRequired: bool option, example: string option, minimum: int option, maximum: int option) =
+type RequestHeadersAttribute (name: string option, description: string option, ``type``: Type option, isRequired: bool option, example: string option, schema: string option, responseType: Type option, minimum: int option, maximum: int option) =
     inherit System.Attribute()
     let mutable name = name
     let mutable description = description
@@ -16,8 +17,10 @@ type RequestHeadersAttribute (name: string option, description: string option, `
     let mutable example = example
     let mutable minimum = minimum
     let mutable maximum = maximum
+    let mutable responseType = responseType
+    let mutable schema = schema
 
-    new() = RequestHeadersAttribute(None, None, None, None, None, None, None)
+    new() = RequestHeadersAttribute(None, None, None, None, None, None, None, None, None)
 
     /// <summary>
     /// This is the name of the header.  Ex: Accept
@@ -49,6 +52,23 @@ type RequestHeadersAttribute (name: string option, description: string option, `
     member x.Example
         with get() = match example with | Some i -> i | None -> ""
         and set value = example <- Some value   
+    
+    /// <summary>
+    /// This is the schema of the payload returned.
+    /// </summary>
+    member x.Schema 
+        with get() = match schema with | Some i -> i | None -> ""
+        and set value = schema <- Some value  
+
+    /// <summary>
+    /// This is an Type of the payload.
+    /// </summary>
+    member x.ResponseType 
+        with get() = match responseType with | Some i -> i | None -> null
+        and set value = let j = new JsonSchemaGenerator() 
+                        x.Schema <- j.Generate(value).ToString()
+                        responseType <- Some value  
+
     /// <summary>
     /// This is for number or integer fields.  It specifies an acceptable minimum number.
     /// </summary>

@@ -331,10 +331,12 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
                                         | true -> sb.AppendFormat("        description: |{1}          {0}{1}", response.Description, Environment.NewLine) |> ignore
                                         | false -> ()
                                         sb.AppendFormat("        body:{0}", Environment.NewLine)
-                                          .AppendFormat("          {0}: {1}", response.ContentType, Environment.NewLine)
-                                          .AppendFormat("            schema: {0}{1}", response.Schema, Environment.NewLine)|> ignore
+                                          .AppendFormat("          {0}: {1}", response.ContentType, Environment.NewLine) |> ignore
+                                        match not(String.IsNullOrEmpty(response.Schema)) with 
+                                        | true ->  sb.AppendFormat("            schema: {0}{1}", response.Schema.Replace("\n", ""), Environment.NewLine) |> ignore
+                                        | false -> ()
                                         match not(String.IsNullOrEmpty(response.Example)) with 
-                                        | true -> sb.AppendFormat("            example: |{1}                {0}{1}", response.Example, Environment.NewLine) |> ignore
+                                        | true -> sb.AppendFormat("            example: |{1}                {0}{1}", response.Example.Replace("\n", ""), Environment.NewLine) |> ignore
                                         | false -> ()
                                     )
 

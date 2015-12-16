@@ -114,10 +114,36 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
             results
         
         let GetBodyParameters(api:ApiDescription) = 
+            let mapParameters (props:System.Reflection.PropertyInfo[], isOptional, documentation, example) =
+                props.Select(
+                    fun q -> new RequestBodyParameterModel(q.Name, documentation, q.PropertyType, isOptional, example)
+                )
+            let results = new List<RequestBodyParameterModel>()
             api.ParameterDescriptions
-                .Where(fun r -> r.Source = ApiParameterSource.FromBody)
-                .Select(fun q -> new RequestBodyParameterModel(q.Name, q.Documentation, q.ParameterDescriptor.ParameterType, q.ParameterDescriptor.IsOptional, match q.ParameterDescriptor.DefaultValue with | null -> "" | _ -> q.ParameterDescriptor.DefaultValue.ToString()))
-                .ToList()
+            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromBody )
+            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
+            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
+            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType.IsComplexModel() )
+            |> Seq.map( fun x -> (x.ParameterDescriptor.ParameterType.GetProperties(), 
+                                    x.ParameterDescriptor.IsOptional, 
+                                    x.Documentation, 
+                                    match x.ParameterDescriptor.DefaultValue with | null -> "" | _ -> x.ParameterDescriptor.DefaultValue.ToString()) )
+            |> Seq.map mapParameters
+            |> Seq.iter results.AddRange
+            
+            api.ParameterDescriptions
+            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromBody )
+            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
+            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
+            |> Seq.filter( fun x -> not (x.ParameterDescriptor.ParameterType.IsComplexModel()) )
+            |> Seq.map ( fun x -> new RequestBodyParameterModel(x.Name, x.Documentation, x.ParameterDescriptor.ParameterType.GetForRealType(), x.ParameterDescriptor.IsOptional, match x.ParameterDescriptor.DefaultValue with | null -> "" | _ -> x.ParameterDescriptor.DefaultValue.ToString()))
+            |> Seq.iter results.Add
+
+            results
+//            api.ParameterDescriptions
+//                .Where(fun r -> r.Source = ApiParameterSource.FromBody)
+//                .Select(fun q -> new RequestBodyParameterModel(q.Name, q.Documentation, q.ParameterDescriptor.ParameterType, q.ParameterDescriptor.IsOptional, match q.ParameterDescriptor.DefaultValue with | null -> "" | _ -> q.ParameterDescriptor.DefaultValue.ToString()))
+//                .ToList()
 
         let GetResponseBodies (api:ApiDescription) = 
             match api.ActionDescriptor with
@@ -134,7 +160,7 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
         let mapApi (api:ApiDescription) = 
             let requestedContentType = match api.HttpMethod.Method.ToLower() with
                                        | "put"
-                                       | "post" -> "application/x-www-form-urlencoded:"
+                                       | "post" -> "application/x-www-form-urlencoded"
                                        | _      -> null
             
             new RouteModel(api.Route.RouteTemplate, 

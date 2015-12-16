@@ -3,6 +3,8 @@ RAMLSharp
 
 This is a tool for ASP.net Web API that will allow you to build RAML documentation.
 
+**Newly added, RAMLSharp is now in F#**
+
 ##Purpose
 The purpose of the tool is to allow a developer to code RAML documentation, using Attributes and Asp.net Web API Help Pages.  This allows you to create RAML documentation using help pages behind the scenes.  The workflow would be:
 
@@ -83,3 +85,5 @@ Special thanks for contributing:
 Jorden Lowe
 
 Dominick Aleardi
+
+Viacheslav Barashkov
