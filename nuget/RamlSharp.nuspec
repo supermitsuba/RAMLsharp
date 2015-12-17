@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>RamlSharp</id>
-    <version>2.0.0.0-beta</version>
+    <version>2.0.0</version>
     <title>RAMLSharp</title>
     <authors>Jorden Lowe, Dominick Aleardi</authors>
     <owners>Quicken Loans</owners>
@@ -16,6 +16,7 @@
     <tags>webapi raml help pages ramlsharp</tags>
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi" version="5.2.3" />
+      <dependency id="FSharp.Core" version="4.0.0" />
     </dependencies>
   </metadata>
 </package>
