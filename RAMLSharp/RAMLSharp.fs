@@ -33,6 +33,26 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
     /// <returns></returns>
     member this.WebApiToRamlModel(baseUri : Uri, title : string, version : string, defaultMediaTypes : string, description : string) =
         let ramlModel = new RAMLModel(title ,baseUri, version, defaultMediaTypes, description, new List<RouteModel>())
+        let filterSourceFromUri (x:ApiParameterDescription) = x.Source = ApiParameterSource.FromUri
+        let filterSourceFromBody (x:ApiParameterDescription) = x.Source = ApiParameterSource.FromBody
+        let filterNullParameterDescriptor (x:ApiParameterDescription) = x.ParameterDescriptor <> null
+        let filterNullParameterType (x:ApiParameterDescription) = x.ParameterDescriptor.ParameterType <> null
+        let filterForUriParameter (api:ApiDescription) (x:ApiParameterDescription) = api.Route.RouteTemplate.Contains(String.Format("{{{0}}}", x.ParameterDescriptor.ParameterName))
+
+        let filterComplexTypes (apis) = apis 
+                                        |> Seq.filter (fun (x:ApiParameterDescription) -> x.ParameterDescriptor.ParameterType.IsComplexModel())
+
+        let filterNonComplexTypes (apis) = apis 
+                                           |> Seq.filter (fun (x:ApiParameterDescription) -> not(x.ParameterDescriptor.ParameterType.IsComplexModel()))
+
+        let filterForUri (apis) = apis
+                                  |> Seq.filter filterSourceFromUri
+                                  |> Seq.filter filterNullParameterDescriptor
+                                  |> Seq.filter filterNullParameterType
+        let filterForBody (apis) = apis
+                                   |> Seq.filter filterSourceFromBody
+                                   |> Seq.filter filterNullParameterDescriptor
+                                   |> Seq.filter filterNullParameterType
 
         let GetHeaders (api:ApiDescription) = 
             match api.ActionDescriptor with
@@ -57,12 +77,11 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
                 )
             
             let results = new List<RequestQueryParameterModel>()
+
             api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromUri )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType.IsComplexModel() )
-            |> Seq.filter( fun x -> not (api.Route.RouteTemplate.Contains(String.Format("{{{0}}}", x.ParameterDescriptor.ParameterName))))
+            |> filterForUri
+            |> filterComplexTypes
+            |> Seq.filter (fun x -> not (filterForUriParameter api x))
             |> Seq.map( fun x -> (x.ParameterDescriptor.ParameterType.GetProperties(), 
                                   x.ParameterDescriptor.IsOptional, 
                                   x.Documentation, 
@@ -70,12 +89,10 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
             |> Seq.map mapParameters
             |> Seq.iter results.AddRange
             
-            api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromUri )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> not (x.ParameterDescriptor.ParameterType.IsComplexModel()) )
-            |> Seq.filter( fun x -> not (api.Route.RouteTemplate.Contains(String.Format("{{{0}}}", x.ParameterDescriptor.ParameterName)))) 
+            api.ParameterDescriptions 
+            |> filterForUri
+            |> filterNonComplexTypes
+            |> Seq.filter( fun x -> not (filterForUriParameter api x) ) 
             |> Seq.map ( fun x -> new RequestQueryParameterModel(x.Name, x.Documentation, x.ParameterDescriptor.ParameterType.GetForRealType(), x.ParameterDescriptor.IsOptional, match x.ParameterDescriptor.DefaultValue with | null -> "" | _ -> x.ParameterDescriptor.DefaultValue.ToString()))
             |> Seq.iter results.Add
 
@@ -90,11 +107,9 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
             
             let results = new List<RequestUriParameterModel>()
             api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromUri )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType.IsComplexModel() )
-            |> Seq.filter( fun x -> api.Route.RouteTemplate.Contains(String.Format("{{{0}}}", x.ParameterDescriptor.ParameterName)))
+            |> filterForUri
+            |> filterComplexTypes
+            |> Seq.filter (filterForUriParameter api)
             |> Seq.map( fun x -> (x.ParameterDescriptor.ParameterType.GetProperties(), 
                                   x.ParameterDescriptor.IsOptional, 
                                   x.Documentation, 
@@ -103,11 +118,9 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
             |> Seq.iter results.AddRange
             
             api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromUri )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> not (x.ParameterDescriptor.ParameterType.IsComplexModel()) )
-            |> Seq.filter( fun x -> api.Route.RouteTemplate.Contains(String.Format("{{{0}}}", x.ParameterDescriptor.ParameterName)))
+            |> filterForUri
+            |> filterNonComplexTypes
+            |> Seq.filter (filterForUriParameter api)
             |> Seq.map ( fun x -> new RequestUriParameterModel(x.Name, x.Documentation, x.ParameterDescriptor.ParameterType.GetForRealType(), x.ParameterDescriptor.IsOptional, match x.ParameterDescriptor.DefaultValue with | null -> "" | _ -> x.ParameterDescriptor.DefaultValue.ToString()))
             |> Seq.iter results.Add
 
@@ -120,10 +133,8 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
                 )
             let results = new List<RequestBodyParameterModel>()
             api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromBody )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType.IsComplexModel() )
+            |> filterForBody
+            |> filterComplexTypes
             |> Seq.map( fun x -> (x.ParameterDescriptor.ParameterType.GetProperties(), 
                                     x.ParameterDescriptor.IsOptional, 
                                     x.Documentation, 
@@ -132,18 +143,12 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
             |> Seq.iter results.AddRange
             
             api.ParameterDescriptions
-            |> Seq.filter( fun x -> x.Source = ApiParameterSource.FromBody )
-            |> Seq.filter( fun x -> x.ParameterDescriptor <> null )
-            |> Seq.filter( fun x -> x.ParameterDescriptor.ParameterType <> null )
-            |> Seq.filter( fun x -> not (x.ParameterDescriptor.ParameterType.IsComplexModel()) )
+            |> filterForBody
+            |> filterNonComplexTypes
             |> Seq.map ( fun x -> new RequestBodyParameterModel(x.Name, x.Documentation, x.ParameterDescriptor.ParameterType.GetForRealType(), x.ParameterDescriptor.IsOptional, match x.ParameterDescriptor.DefaultValue with | null -> "" | _ -> x.ParameterDescriptor.DefaultValue.ToString()))
             |> Seq.iter results.Add
 
             results
-//            api.ParameterDescriptions
-//                .Where(fun r -> r.Source = ApiParameterSource.FromBody)
-//                .Select(fun q -> new RequestBodyParameterModel(q.Name, q.Documentation, q.ParameterDescriptor.ParameterType, q.ParameterDescriptor.IsOptional, match q.ParameterDescriptor.DefaultValue with | null -> "" | _ -> q.ParameterDescriptor.DefaultValue.ToString()))
-//                .ToList()
 
         let GetResponseBodies (api:ApiDescription) = 
             match api.ActionDescriptor with
