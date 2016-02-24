@@ -2,11 +2,23 @@
 open System.Text
 open System
 
-let createDocumentation description (sb:StringBuilder) = 
-    sb.AppendFormat("documentation: {0}", Environment.NewLine)
-        .AppendFormat("  - title: The Description of the API{0}", Environment.NewLine)
-        .AppendFormat("    content: |{0}", Environment.NewLine)
-        .AppendFormat("      {0}{1}", description , Environment.NewLine) 
+let createVersion version (sb:StringBuilder) =
+    match version with 
+    | null -> sb
+    | _    -> sb.AppendFormat("version: {0}{1}", version , Environment.NewLine)
+
+let createDefaultMediaType value (sb:StringBuilder) =
+    match value with 
+    | null -> sb 
+    | _    -> sb.AppendFormat("mediaType: {0}{1}", value , Environment.NewLine)
+
+let createDocumentation description (sb:StringBuilder) =
+    match description with 
+    | null -> sb 
+    | _    -> sb.AppendFormat("documentation: {0}", Environment.NewLine)
+                .AppendFormat("  - title: The Description of the API{0}", Environment.NewLine)
+                .AppendFormat("    content: |{0}", Environment.NewLine)
+                .AppendFormat("      {0}{1}", description , Environment.NewLine) 
 
 let createBody requestedContentType (sb:StringBuilder)  = 
     sb.AppendFormat("    body:{0}", Environment.NewLine)
@@ -43,6 +55,13 @@ let createQueryParameters(name, ramlType, isRequired, description, example)(sb:S
       .AppendFormat("          required: {0}{1}", isRequired.ToString().ToLower(), Environment.NewLine )
       .AppendFormat("          description: {0}{1}", description, Environment.NewLine )
       .AppendFormat("          example: |{1}            {0}{1}", example, Environment.NewLine ) |> ignore
+
+let createUriParameters(name, ramlType, isRequired, description, example)(sb:StringBuilder) =
+    sb.AppendFormat("      {0}: {1}", name, Environment.NewLine)
+      .AppendFormat("        type: {0}{1}", ramlType, Environment.NewLine)
+      .AppendFormat("        required: {0}{1}", isRequired, Environment.NewLine)
+      .AppendFormat("        description: {0}{1}", description, Environment.NewLine)
+      .AppendFormat("        example: |{1}            {0}{1}", example, Environment.NewLine) |> ignore
 
 let createResponse(statusCode, description, contentType, schema, example)(sb:StringBuilder) =  
     sb.AppendFormat("      {0}:{1}", statusCode, Environment.NewLine) |> ignore

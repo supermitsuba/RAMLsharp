@@ -237,55 +237,41 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
     override this.ToString() = 
         let hasVisitedRoutes = new Dictionary<string, bool>()
 
-        let SetRamlRoot (sb:StringBuilder) = 
+        let setUriParameters (sb:StringBuilder, route:RouteModel) = 
+            match route.UriParameters = null || route.UriParameters.Count <= 0 with 
+            | true  -> ()
+            | false -> sb.AppendFormat("  uriParameters: {0}", Environment.NewLine) |> ignore
+                       route.UriParameters
+                       |> Seq.iter( fun x -> sb |> createUriParameters(x.Name, x.Type.ToRamlType(), x.IsRequired.ToString().ToLower(), x.Description, x.Example) )
+                       
+        let setRoutes (sb:StringBuilder, route:RouteModel) =
+            match not(hasVisitedRoutes.ContainsKey(route.UrlTemplate)) || not(hasVisitedRoutes.[route.UrlTemplate]) with
+            | true  -> setUriParameters(sb, route)
+                       hasVisitedRoutes.Add(route.UrlTemplate, true)
+                       ()
+            | false -> ()
 
-            let UriScheme = match this.BaseUri with | null -> "HTTP" | _ -> this.BaseUri.Scheme.ToUpper()
-            sb.Append("#%RAML 0.8" + Environment.NewLine) 
-              .Append("---" + Environment.NewLine)
-              .AppendFormat("title: {0}{1}", this.Title , Environment.NewLine)
-              .AppendFormat("baseUri: {0}{1}", this.BaseUri , Environment.NewLine)
-              .AppendFormat("protocols: [{0}]{1}", UriScheme , Environment.NewLine) |> ignore
+            sb.AppendFormat("  {0}:{1}", route.Verb, Environment.NewLine)
+              .AppendFormat("    description: {0}{1}", route.Description, Environment.NewLine) |> ignore
             
-            match this.Version with 
-            | null -> () 
-            | _ -> sb.AppendFormat("version: {0}{1}", this.Version , Environment.NewLine) |> ignore
-
-            match this.DefaultMediaType with 
-            | null -> () 
-            | _ -> sb.AppendFormat("mediaType: {0}{1}", this.DefaultMediaType , Environment.NewLine) |> ignore
-
-            match this.Description with 
-            | null -> sb 
-            | _ -> sb |> createDocumentation(this.Description)
-                   
-        let setHttpVerb (sb:StringBuilder, route:RouteModel) = 
-            sb.AppendFormat("  {0}:{1}", route.Verb, Environment.NewLine) |> ignore
-
-        let setDescription (sb:StringBuilder, route:RouteModel) = 
-            sb.AppendFormat("    description: {0}{1}", route.Description, Environment.NewLine) |> ignore
-
-        let setRequest (sb:StringBuilder, route:RouteModel) = 
             match route.BodyParameters = null || route.BodyParameters.Count = 0 with
-            | true -> ()
-            |false -> sb |> createBody(route.RequestContentType)
-                      route.BodyParameters
-                      |> Seq.iter (fun x -> sb |> createBodyParameters (x.Name, x.Description, x.Type.ToRamlType(),  x.IsRequired.ToString().ToLower(), x.Example))
-
-        let setHeaders (sb:StringBuilder, route:RouteModel) = 
+            | true  -> ()
+            | false -> sb |> createBody(route.RequestContentType)
+                       route.BodyParameters
+                       |> Seq.iter (fun x -> sb |> createBodyParameters (x.Name, x.Description, x.Type.ToRamlType(),  x.IsRequired.ToString().ToLower(), x.Example))
+            
             match route.Headers = null || route.Headers.Count <= 0 || route.Headers.All(fun p -> String.IsNullOrEmpty(p.Name)) with
             |  true -> ()
             | false -> sb.AppendFormat("    headers:{0}", Environment.NewLine) |> ignore
                        route.Headers
                        |> Seq.iter (fun x-> sb |> createHeaders(x.Name, x.Example, x.Type.ToRamlType(), x.Minimum, x.Maximum, x.Description))
 
-        let setParameters (sb:StringBuilder, route:RouteModel) = 
             match route.QueryParameters = null || route.QueryParameters.Count = 0 with
             | true  -> ()
             | false -> sb.AppendFormat("    queryParameters: {0}", Environment.NewLine) |> ignore
                        route.QueryParameters
                        |> Seq.iter( fun x-> sb |> createQueryParameters(x.Name, x.Type.ToRamlType(), x.IsRequired, x.Description, x.Example) )
-
-        let setResponses (sb:StringBuilder, route:RouteModel) =
+            
             match route.Responses = null || 
                 route.Responses.Count <= 0 ||
                 route.Responses.All(fun p -> String.IsNullOrEmpty(p.ContentType)) with
@@ -294,32 +280,6 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
                        route.Responses
                        |> Seq.sortBy(fun x -> x.StatusCode)
                        |> Seq.iter (fun x -> sb |> createResponse((int)x.StatusCode, x.Description, x.ContentType, x.Schema, x.Example))
-
-        let setUriParameters (sb:StringBuilder, route:RouteModel) = 
-            match route.UriParameters = null || route.UriParameters.Count <= 0 with 
-            | true -> ()
-            |false -> sb.AppendFormat("  uriParameters: {0}", Environment.NewLine) |> ignore
-                      route.UriParameters
-                      |> Seq.iter( fun parameters -> 
-                                        sb.AppendFormat("      {0}: {1}", parameters.Name, Environment.NewLine)
-                                          .AppendFormat("        type: {0}{1}", parameters.Type.ToRamlType(), Environment.NewLine)
-                                          .AppendFormat("        required: {0}{1}", parameters.IsRequired.ToString().ToLower(), Environment.NewLine)
-                                          .AppendFormat("        description: {0}{1}", parameters.Description, Environment.NewLine)
-                                          .AppendFormat("        example: |{1}            {0}{1}", parameters.Example, Environment.NewLine) |> ignore)
-
-        let setRoutes (sb:StringBuilder, route:RouteModel) =
-            match not(hasVisitedRoutes.ContainsKey(route.UrlTemplate)) || not(hasVisitedRoutes.[route.UrlTemplate]) with
-            | true  -> setUriParameters(sb, route)
-                       hasVisitedRoutes.Add(route.UrlTemplate, true)
-                       ()
-            | false -> ()
-
-            setHttpVerb(sb, route)
-            setDescription(sb, route)
-            setRequest(sb, route)
-            setHeaders(sb, route)
-            setParameters(sb, route)
-            setResponses(sb, route)
             ()
 
         let setResources (resource, verb, sb:StringBuilder) = 
@@ -331,7 +291,17 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
             |> Seq.iter (fun x -> setRoutes (sb, x) )
             ()
         
-
+        let SetRamlRoot (sb:StringBuilder) = 
+            let UriScheme = match this.BaseUri with | null -> "HTTP" | _ -> this.BaseUri.Scheme.ToUpper()
+            sb.Append("#%RAML 0.8" + Environment.NewLine) 
+              .Append("---" + Environment.NewLine)
+              .AppendFormat("title: {0}{1}", this.Title , Environment.NewLine)
+              .AppendFormat("baseUri: {0}{1}", this.BaseUri , Environment.NewLine)
+              .AppendFormat("protocols: [{0}]{1}", UriScheme , Environment.NewLine)
+            |> createVersion this.Version
+            |> createDefaultMediaType this.DefaultMediaType
+            |> createDocumentation this.Description
+          
         let SetRamlBody (sb:StringBuilder) = 
             match this.Routes = null || this.Routes.Count = 0 with
             | true  -> sb
@@ -339,7 +309,6 @@ type RAMLModel(title, baseUrl, version, defaultMediaType, description, routes) =
                         |> Seq.sortBy( fun p -> p.UrlTemplate )
                         |> Seq.groupBy( fun p -> p.UrlTemplate)
                         |> Seq.iter( fun (key, item) ->  setResources(key, item, sb))
-
                         sb)
 
         let sb = new StringBuilder()
