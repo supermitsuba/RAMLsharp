@@ -45,7 +45,27 @@ public static void Register(HttpConfiguration config)
 
 3)  Enable XML documentation under the project properties of the Web API project.  Click on the build tab, and make sure the path matches to step 2.
 
-4)  The controller call for RAML is already added.  You can visit your http://{Your API BaseUrl}/api/RAML
+4)  Add the RAML endpoint to host your RAML.  You can visit your http://{Your API BaseUrl}/api/RAML
+
+```csharp
+// GET api/RAML
+/// <summary>
+/// Gets Raml
+/// </summary>
+/// <returns>Returns a string of RAML</returns>
+[Route("api/RAML"), HttpGet]
+public HttpResponseMessage Raml()
+{
+  var result = new HttpResponseMessage(HttpStatusCode.OK);
+  var r = new RAMLMapper(this);
+  var data = r.WebApiToRamlModel(new Uri("http://www.google.com"), "Test API", "1", "application/json", "This is a test")
+              .ToString();
+  result.Content = new StringContent(data);
+  result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/Raml+yaml");
+  result.Content.Headers.ContentLength = data.Length;
+  return result;
+}
+```
 
 5)  Lastly, add some XML documentation to your API calls:
 
