@@ -1,4 +1,4 @@
-﻿<Properties StartupItem="RamlSharp.Sample/RamlSharp.Sample.csproj">
+﻿<Properties StartupItem="RamlSharp.Convention/RamlSharp.Convention.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="RAMLSharp/RAMLSharp.fs">
     <Files>
