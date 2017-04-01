@@ -1,21 +1,13 @@
-﻿<Properties StartupItem="RamlSharp.Sample/RamlSharp.Sample.csproj">
+﻿<Properties StartupConfiguration="{39405F35-39A7-40A5-9364-268FC79195A7}|Unit Tests">
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="RAMLSharp/RAMLSharp.fs">
-    <Files>
-      <File FileName="RAMLSharp/RAMLSharp.fs" Line="151" Column="20" />
-    </Files>
-    <Pads>
-      <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State name="__root__">
-          <Node name="RAMLSharp" expanded="True" selected="True" />
-        </State>
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/supermitsuba/git/CSharp/RAMLsharp/RamlSharp.CSharp.Test/RamlMapperTests.cs" line="207" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.RamlSharp.Tests PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.RamlSharp.Sample PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
 </Properties>

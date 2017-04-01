@@ -4,8 +4,8 @@ open System
 open System.Collections.Generic
 open System.IO
 open System.Linq
-open System.Web.Http
-open System.Web.Http.Description
+open Microsoft.AspNetCore.Mvc
+open Microsoft.AspNetCore.Mvc.ApiExplorer
 open RAMLSharp.Models
 open RAMLSharp.Attributes
 open RAMLSharp.Extensions
@@ -19,7 +19,7 @@ type RAMLMapper (description : IEnumerable<ApiDescription>) =
     /// This constructor is the main constructor to pass in your controller and find out about your Web API.
     /// </summary>
     /// <param name="controller">The controller that is hosting your API.</param>
-    new (controller : ApiController) = 
+    new (controller : Controller) = 
         RAMLMapper(controller.Configuration.Services.GetApiExplorer().ApiDescriptions)
 
     /// <summary>

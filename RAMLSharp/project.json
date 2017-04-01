@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0-*",
+  "dependencies": {
+    "Microsoft.AspNetCore.Mvc.ApiExplorer":"1.0.1",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.AspNetCore.Mvc": "1.0.1"
+  },
+  "buildOptions": {
+    "debugType": "portable",
+    "compilerName": "fsc",
+    "compile": {
+      "includeFiles": [
+        "ApplicationInfo.fs",
+        "Attributes.fs",
+        "Extensions.fs",
+        "ModelHelpers.fs",
+        "Models.fs",
+        "RAMLSharp.fs"
+      ]
+    }
+  },
+  "tools": {
+    "dotnet-compile-fsc": "1.0.0-preview2.1-*"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1",
+        "Microsoft.FSharp.Core.netcore": "1.0.0-alpha-160629"
+      }
+    }
+  }
+}
